@@ -1,0 +1,3 @@
+/Users/chenyuzhang/CLionProjects/3002priject/3002_2/cmake-build-debug/CMakeFiles/MySDL2Project.dir
+/Users/chenyuzhang/CLionProjects/3002priject/3002_2/cmake-build-debug/CMakeFiles/edit_cache.dir
+/Users/chenyuzhang/CLionProjects/3002priject/3002_2/cmake-build-debug/CMakeFiles/rebuild_cache.dir

@@ -1,0 +1,7 @@
+/Applications/CLion.app/Contents/bin/cmake/mac/aarch64/bin/cmake -DCMAKE_BUILD_TYPE=Debug -DCMAKE_MAKE_PROGRAM=/Applications/CLion.app/Contents/bin/ninja/mac/aarch64/ninja -G Ninja -S /Users/chenyuzhang/CLionProjects/3002priject/3002_2 -B /Users/chenyuzhang/CLionProjects/3002priject/3002_2/cmake-build-debug
+-- SDL2_INCLUDE_DIRS: /Library/Frameworks/SDL2.framework/Headers;/Library/Frameworks/SDL2.framework
+-- SDL2_LIBRARIES: SDL2::SDL2
+-- SDL2_IMAGE_FRAMEWORK_PATH: /Library/Frameworks/SDL2_image.framework
+-- Configuring done (0.1s)
+-- Generating done (0.0s)
+-- Build files have been written to: /Users/chenyuzhang/CLionProjects/3002priject/3002_2/cmake-build-debug
