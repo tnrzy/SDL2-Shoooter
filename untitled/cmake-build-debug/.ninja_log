@@ -1,0 +1,22 @@
+# ninja log v6
+406	676	7529427448384568	main.cpp.exe	bcb9b03362dfdc4c
+284	2734	7540378244548340	src/CMakeFiles/untitled.dir/input.cpp.obj	49ddb6c59755974
+876	1141	7529434313891204	tt.cpp.exe	4b00648e4d0539e2
+1	225	7548410054102088	build.ninja	7f37b6c5e6e2eb19
+3639	3915	7530348006183138	untitled.exe	654bac9187621c5e
+6	1131	7540389943662585	src/CMakeFiles/untitled.dir/draw.cpp.obj	792227d688e2a972
+2	840	7530377321938266	src/CMakeFiles/untitled.dir/main.c.obj	c7221a966e27c3b5
+4	1072	7548406369010223	src/CMakeFiles/untitled.dir/main.cpp.obj	7b064ea543f33f67
+1127	1224	7544998717820504	src/untitled.exe	7778b367ca7a4195
+2	1362	7530370185177854	src/CMakeFiles/Window.cpp.dir/Window.cpp.obj	ee2ac6df2f015c2c
+4	860	7530388309962058	src/CMakeFiles/untitled.dir/draw.c.obj	381067e40befcb71
+72	933	7530388310640397	src/CMakeFiles/untitled.dir/init.c.obj	22a89b46f7c1a9ed
+143	1003	7530388311348791	src/CMakeFiles/untitled.dir/input.c.obj	1bad2f18c543374b
+188	2790	7540378243586081	src/CMakeFiles/untitled.dir/init.cpp.obj	c825e288f091623a
+89	1856	7540389944484423	src/CMakeFiles/untitled.dir/stage.cpp.obj	256a56d4584ba582
+11	1267	7548406369090347	src/CMakeFiles/untitled.dir/background.cpp.obj	e33513b8686b6492
+23	1736	7548406223333950	src/CMakeFiles/untitled.dir/enemy.cpp.obj	fe4c48e197f89be7
+29	1470	7548406223393799	src/CMakeFiles/untitled.dir/Player.cpp.obj	d9ee633d544eb71e
+36	1469	7548406223464227	src/CMakeFiles/untitled.dir/bullet.cpp.obj	443db7b415db9aaa
+3	1049	7548410113973632	src/CMakeFiles/untitled.dir/drop_items.cpp.obj	1870bedc36f4de3f
+1049	1169	7548410124436067	src/untitled.exe	2d8f52e3755588f0
