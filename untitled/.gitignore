@@ -1,0 +1,6 @@
+# dir 不需要提交的目录
+/cmake-build-debug
+
+# file 不需要提交的文件
+CMakeLists.txt
+/src/CMakeLists.txt
