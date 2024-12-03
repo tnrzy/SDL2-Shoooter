@@ -121,7 +121,7 @@ void Background::init() { //用于初始化的函数
     minion_width = backgroundSurface->w * 0.8; //选择产生的宽度为背景图片的0.8倍
     window_height = backgroundSurface->h;
     playerX = backgroundSurface->w / 2;
-    playerY = 7*backgroundSurface->h / 8;
+    playerY = backgroundSurface->h / 2;
 
     window = SDL_CreateWindow("STG Game", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
         backgroundSurface->w, backgroundSurface->h, SDL_WINDOW_SHOWN); //这样获取的窗口就直接是图片大小
@@ -452,8 +452,8 @@ void Background::render() { //设定渲染器的函数
                         itMinion = minion->positions.erase(itMinion);
                         continue;
                     }
-                    if ((*itMinion)->position.x >= (playerX + player->playerWidth/2) - bullet->width &&
-                    (*itMinion)->position.x <= (playerX + player->playerWidth/2) + bullet->width ) {
+                    if ((*itMinion)->position.x + minion->widths[(*itMinion)->type] >= (playerX + player->playerWidth/2) - bullet->width/2 &&
+                    (*itMinion)->position.x <= (playerX + player->playerWidth/2) + bullet->width/2 ) {
                         if (itMinion != minion->positions.end()) { //防止数组越界
                             (*itMinion)->health = (*itMinion)->health - 0.1;
                             double k = (*itMinion)->position.w * ((*itMinion)->health)/((*itMinion)->max_health);
