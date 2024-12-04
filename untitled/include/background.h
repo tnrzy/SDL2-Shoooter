@@ -16,6 +16,7 @@
 #include <string>
 #include <iostream>
 #include "drop_items.h"
+#include "enemy_control.h"
 
 enum GameState {
     START,
@@ -65,6 +66,7 @@ private:
 
     Bullet *bullet;
     drop_items *drop;
+    enemy_controller *controller;
     double magic_point;
     int beated_enemy;
     int score;

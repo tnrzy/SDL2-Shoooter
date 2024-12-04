@@ -7,6 +7,7 @@
 
 
 class Enemy {
+public:
     class enemy_info {
 
     public:
@@ -52,7 +53,6 @@ class Enemy {
         int drop_num;
     };
 
-public:
     Enemy(SDL_Renderer *renderer);
 
     ~Enemy();

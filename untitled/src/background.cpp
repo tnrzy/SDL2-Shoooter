@@ -5,6 +5,7 @@
 #include "../include/background.h"
 #include "../include/enemy.h"
 #include "../include/Player.h"
+#include "../include/enemy_control.h"
 #include <SDL_ttf.h>
 #include <string>
 #include <iostream>
@@ -148,6 +149,7 @@ void Background::gameplay() { //游戏进程函数
     player = new Player(renderer);
     minion = new Enemy(renderer);
     drop = new drop_items(renderer);
+    controller = new enemy_controller();
 
     SDL_Event event; //用于接受传入的各类事件
     uint32_t begin, end, elapsed, rate;
@@ -252,10 +254,12 @@ void Background::render() { //设定渲染器的函数
             delete bullet;
             delete player; //删除对象达到重新开始的效果,再次开始时需要重新创建
             delete drop;
+            delete controller;
             bullet = new Bullet(renderer);
             player = new Player(renderer);
             minion = new Enemy(renderer);
             drop = new drop_items(renderer);
+            controller = new enemy_controller();
 
             break;
         case PLAYING:
@@ -317,6 +321,7 @@ void Background::render() { //设定渲染器的函数
                                         score+=2;
                                     }
                                     drop ->add_drop((*itMinion)->position,(*itMinion)->drop_num);
+                                    controller->minion_elimination((*itMinion));
                                     itMinion = minion->positions.erase(itMinion);
                                 }
                             } else {
@@ -393,6 +398,7 @@ void Background::render() { //设定渲染器的函数
                                         score+=2;
                                     }
                                     drop ->add_drop((*itMinion)->position,(*itMinion)->drop_num);
+                                    controller->minion_elimination((*itMinion));
                                     itMinion = minion->positions.erase(itMinion);
                                 }
                             } else {
@@ -465,6 +471,7 @@ void Background::render() { //设定渲染器的函数
                                     score+=2;
                                 }
                                 drop ->add_drop((*itMinion)->position,(*itMinion)->drop_num);
+                                controller->minion_elimination((*itMinion));
                                 itMinion = minion->positions.erase(itMinion);
                             }
                         } else {
