@@ -71,7 +71,20 @@ void Enemy::render(SDL_Renderer *renderer, int wide) { //需要获取窗口的�
         }
     }
 }
-
+bool Enemy::check_collision(int playerX, int playerY,int player_width, int player_height) {
+    int x_core = playerX + player_width/2;
+    int y_core = playerY + player_height/2;
+    for (auto & enemy : positions) {
+        if(enemy ->position.y-5 <= y_core && y_core <= enemy->position.y + heights[enemy->type] + 5){
+            int left = enemy ->position.x ;
+            int right = enemy ->position.x + widths[enemy->type];
+            if (left <= x_core && x_core <= right){
+                return true;
+            }
+        }
+    }
+    return false;
+}
 void Enemy::start() {
     startTime = SDL_GetTicks(); //返回自初始化经过的毫秒数
 }

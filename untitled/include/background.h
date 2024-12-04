@@ -7,12 +7,12 @@
 #endif
 
 #include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
+#include <SDL_image.h>
 #include "enemy.h"
 #include "Player.h"
 #include "bullet.h"
 #include <cstdio>
-#include <SDL2/SDL_ttf.h>
+#include <SDL_ttf.h>
 #include <string>
 #include <iostream>
 #include "drop_items.h"

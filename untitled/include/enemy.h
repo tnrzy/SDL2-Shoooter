@@ -65,6 +65,8 @@ public:
     std::vector<int> widths;
     std::vector<int> heights;
 
+    bool check_collision(int playerX, int playerY, int player_width, int player_height);
+
 protected: //可以设计子类访问
     int type_num = 3;
     SDL_Surface *minionSurface;

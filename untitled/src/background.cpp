@@ -1,11 +1,11 @@
 #include <stdio.h>
 #include <cstdio>
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
+#include <SDL.h>
+#include <SDL_image.h>
 #include "../include/background.h"
 #include "../include/enemy.h"
 #include "../include/Player.h"
-#include <SDL2/SDL_ttf.h>
+#include <SDL_ttf.h>
 #include <string>
 #include <iostream>
 using namespace std;
@@ -346,13 +346,6 @@ void Background::render() { //设定渲染器的函数
                             }
                         }
                     }
-                    if ((*itMinion)->position.x >= playerX && (*itMinion)->position.x <= (playerX + minion->widths[(*itMinion)->type])
-                        && (*itMinion)->position.y >= playerY && (*itMinion)->position.y <= (playerY + minion->heights[(*itMinion)->type])) {
-                        state = END;
-                        }
-                    if (itMinion != minion->positions.end()) {
-                        ++itMinion;
-                    }
                 }
             }
 
@@ -429,12 +422,6 @@ void Background::render() { //设定渲染器的函数
                         }
                     }
                 }
-                for (auto & position : minion->positions) {
-                    if (position->position.x >= playerX && position->position.x <= (playerX + minion->widths[position->type])
-                        && position->position.y >= playerY && position->position.y <= (playerY + minion->heights[position->type])) {
-                        state = END;
-                        }
-                }
             }
 
         if (player->playerType == 2) { //x + (player->playerWidth/2)-width/2, y - (player->playerHeight)
@@ -507,14 +494,10 @@ void Background::render() { //设定渲染器的函数
                     }
                 }
             }
-            for (auto & position : minion->positions) {
-                if (position->position.x >= playerX && position->position.x <= (playerX + minion->widths[position->type])
-                    && position->position.y >= playerY && position->position.y <= (playerY + minion->heights[position->type])) {
-                    state = END;
-                    }
-            }
         }
-
+        if (minion->check_collision(playerX,playerY,player->playerWidth,player->playerHeight)){
+                state = END;
+        }
             break;
     }
 
