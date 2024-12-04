@@ -94,6 +94,10 @@ void Bullet::render(SDL_Renderer *renderer, int x, int y, Player *player) { //�
             int dy = 5; //子弹的速度
             for (int i = 0; i < bulletPosition.size(); i++) {
                 bulletPosition[i].y -= dy;
+                if (bulletPosition[i].y < 0) {
+                    bulletPosition.erase(bulletPosition.begin() + i);
+                    continue;
+                }
                 SDL_Rect rect = bulletPosition[i];
                 SDL_RenderCopy(renderer, bulletTexture, NULL, &rect);
             }

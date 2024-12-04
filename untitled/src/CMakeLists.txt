@@ -5,4 +5,6 @@ add_executable(untitled
         enemy.cpp
         Player.cpp
         bullet.cpp
+        boss.cpp
+        enemy_control.cpp
 )

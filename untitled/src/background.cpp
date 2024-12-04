@@ -1,12 +1,12 @@
 #include <stdio.h>
 #include <cstdio>
-#include <SDL.h>
-#include <SDL_image.h>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
 #include "../include/background.h"
 #include "../include/enemy.h"
 #include "../include/Player.h"
 #include "../include/enemy_control.h"
-#include <SDL_ttf.h>
+#include <SDL2/SDL_ttf.h>
 #include <string>
 #include <iostream>
 using namespace std;
@@ -280,68 +280,71 @@ void Background::render() { //设定渲染器的函数
                     if (itdrop != drop->dropposition.end()) {
                         ++itdrop;
                     }
-
                 }
                 for (auto itMinion = minion->positions.begin(); itMinion != minion->positions.end();) {
-                    if ((*itMinion)->position.y > window_height+ 50){
+                    if ((*itMinion)->position.y > window_height + 50) {
                         itMinion = minion->positions.erase(itMinion);
                         continue;
                     }
-                    for (auto itBullet = bullet->bulletPosition.begin(); itBullet != bullet->bulletPosition.end();) { //对子弹的检测
-                        if (itBullet->x >= ((*itMinion)->position.x-bullet->width + 2)
-                            && itBullet->x <= ((*itMinion)->position.x + minion->widths[(*itMinion)->type] - 2)
-                            && itBullet->y >= (*itMinion)->position.y
-                            && itBullet->y <= ((*itMinion)->position.y + minion->heights[(*itMinion)->type]) - 7) {
-                            if (itBullet != bullet->bulletPosition.end()) { //防止数组越界
+                    for (auto itBullet = bullet->bulletPosition.begin(); itBullet != bullet->bulletPosition.end();) {
+                        //对子弹的检测
+                        if (itBullet->x + bullet->width>= (*itMinion)->position.x
+                            && itBullet->x <= ((*itMinion)->position.x + minion->widths[(*itMinion)->type])
+                            && itBullet->y + bullet->height >= (*itMinion)->position.y
+                            && itBullet->y <= ((*itMinion)->position.y + minion->heights[(*itMinion)->type])) {
+                            if (itBullet != bullet->bulletPosition.end()) {
+                                //防止数组越界
                                 itBullet = bullet->bulletPosition.erase(itBullet);
                             } else {
                                 bullet->bulletPosition.pop_back();
                             }
-                            if (itMinion != minion->positions.end()) { //防止数组越界
+                            if (itMinion != minion->positions.end()) {
+                                //防止数组越界
                                 (*itMinion)->health = (*itMinion)->health - 1;
-                                double k = (*itMinion)->position.w * ((*itMinion)->health)/((*itMinion)->max_health);
+                                double k = (*itMinion)->position.w * ((*itMinion)->health) / ((*itMinion)->
+                                               max_health);
                                 (*itMinion)->health_bar.w = static_cast<int>(std::round(k));
-                                if ((*itMinion)->health == 0){
-                                    beated_enemy+=1;
+                                if ((*itMinion)->health == 0) {
+                                    beated_enemy += 1;
                                     int sco = (*itMinion)->type;
                                     if (sco == 2) {
-                                        if (magic_point<=4) {
-                                            magic_point+=0.1;
+                                        if (magic_point <= 4) {
+                                            magic_point += 0.1;
                                         }
-                                        score+=1;
-                                    }else if (sco == 1) {
-                                        if (magic_point<=4) {
-                                            magic_point+=0.3;
+                                        score += 1;
+                                    } else if (sco == 1) {
+                                        if (magic_point <= 4) {
+                                            magic_point += 0.3;
                                         }
-                                        score+=3;
-                                    }else if (sco == 0) {
-                                        if (magic_point<=4) {
-                                            magic_point+=0.2;
+                                        score += 3;
+                                    } else if (sco == 0) {
+                                        if (magic_point <= 4) {
+                                            magic_point += 0.2;
                                         }
-                                        score+=2;
+                                        score += 2;
                                     }
-                                    drop ->add_drop((*itMinion)->position,(*itMinion)->drop_num);
+                                    drop->add_drop((*itMinion)->position, (*itMinion)->drop_num);
                                     controller->minion_elimination((*itMinion));
                                     itMinion = minion->positions.erase(itMinion);
                                 }
                             } else {
-                                beated_enemy+=1;
+                                beated_enemy += 1;
                                 int sco = (*itMinion)->type;
                                 if (sco == 2) {
-                                    if (magic_point<=4) {
-                                        magic_point+=0.1;
+                                    if (magic_point <= 4) {
+                                        magic_point += 0.1;
                                     }
-                                    score+=1;
-                                }else if (sco == 1) {
-                                    if (magic_point<=4) {
-                                        magic_point+=0.3;
+                                    score += 1;
+                                } else if (sco == 1) {
+                                    if (magic_point <= 4) {
+                                        magic_point += 0.3;
                                     }
-                                    score+=3;
-                                }else if (sco == 0) {
-                                    if (magic_point<=4) {
-                                        magic_point+=0.2;
+                                    score += 3;
+                                } else if (sco == 0) {
+                                    if (magic_point <= 4) {
+                                        magic_point += 0.2;
                                     }
-                                    score+=2;
+                                    score += 2;
                                 }
                                 minion->positions.pop_back();
                             }
@@ -350,6 +353,9 @@ void Background::render() { //设定渲染器的函数
                                 ++itBullet;
                             }
                         }
+                    }
+                    if (itMinion != minion->positions.end()) {
+                        ++itMinion;
                     }
                 }
             }
@@ -370,10 +376,10 @@ void Background::render() { //设定渲染器的函数
                             itMinion = minion->positions.erase(itMinion);
                             continue;
                         }
-                        if ((*itMinion)->position.x >= (playerX + player->playerWidth/2) - bullet->width*(bullet->firePoint)/2 &&
+                        if ((*itMinion)->position.x + minion->widths[(*itMinion)->type] >= (playerX + player->playerWidth/2) - bullet->width*(bullet->firePoint)/2 &&
                         (*itMinion)->position.x <= (playerX + player->playerWidth/2) + bullet->width*(bullet->firePoint)/2 &&
                         (*itMinion)->position.y <= playerY &&
-                        (*itMinion)->position.y >= playerY - bullet->height*(bullet->firePoint)) {
+                        (*itMinion)->position.y + minion->heights[(*itMinion)->type] >= playerY - bullet->height*(bullet->firePoint)) {
                             if (itMinion != minion->positions.end()) { //防止数组越界
                                 (*itMinion)->health = (*itMinion)->health - 0.1;
                                 double k = (*itMinion)->position.w * ((*itMinion)->health)/((*itMinion)->max_health);

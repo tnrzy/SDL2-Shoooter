@@ -1,4 +1,4 @@
-# Install script for directory: I:/CLionProjects/untitled/src
+# Install script for directory: I:/MoyuanCodes/test/untitled/src
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
