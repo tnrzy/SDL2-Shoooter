@@ -7,16 +7,16 @@
 #endif
 
 #include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
 #include "enemy.h"
 #include "Player.h"
 #include "bullet.h"
 #include <cstdio>
-#include <SDL2/SDL_ttf.h>
 #include <string>
 #include <iostream>
 #include "drop_items.h"
 #include "enemy_control.h"
+#include "common.h"
+#include "minion_explosion.h"
 
 enum GameState {
     START,
@@ -67,6 +67,7 @@ private:
     Bullet *bullet;
     drop_items *drop;
     enemy_controller *controller;
+    minion_explosion *explosions;
     double magic_point;
     int beated_enemy;
     int score;

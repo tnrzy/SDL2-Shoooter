@@ -65,7 +65,6 @@ void Enemy::render(SDL_Renderer *renderer, int wide) { //需要获取窗口的�
             positions[i]->health_bar.y += positions[i] -> dy;
             SDL_Rect rect0 = positions[i]->position;
             SDL_RenderCopy(renderer,miniontextures[positions[i]->type], nullptr,&rect0);
-            //positions[i] -> health_bar.w = positions[i] -> health_bar.w /2;
             SDL_Rect rect1 = positions[i] -> health_bar;
             SDL_RenderFillRect(renderer,&rect1);
         }

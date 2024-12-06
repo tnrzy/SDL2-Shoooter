@@ -1,12 +1,13 @@
 #include <stdio.h>
+#include "../include/common.h"
 #include <cstdio>
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
+
+
 #include "../include/background.h"
 #include "../include/enemy.h"
 #include "../include/Player.h"
 #include "../include/enemy_control.h"
-#include <SDL2/SDL_ttf.h>
+#include "../include/minion_explosion.h"
 #include <string>
 #include <iostream>
 using namespace std;
@@ -150,6 +151,7 @@ void Background::gameplay() { //游戏进程函数
     minion = new Enemy(renderer);
     drop = new drop_items(renderer);
     controller = new enemy_controller();
+    explosions = new minion_explosion(renderer);
 
     SDL_Event event; //用于接受传入的各类事件
     uint32_t begin, end, elapsed, rate;
@@ -255,10 +257,12 @@ void Background::render() { //设定渲染器的函数
             delete player; //删除对象达到重新开始的效果,再次开始时需要重新创建
             delete drop;
             delete controller;
+            delete explosions;
             bullet = new Bullet(renderer);
             player = new Player(renderer);
             minion = new Enemy(renderer);
             drop = new drop_items(renderer);
+            explosions = new minion_explosion(renderer);
             controller = new enemy_controller();
 
             break;
@@ -268,7 +272,7 @@ void Background::render() { //设定渲染器的函数
 
             player -> render(playerX, playerY); //利用传入的数据刷新player的渲染器；在此处渲染是为了保证每次渲染屏幕时，player都会被渲染到
             minion->render(renderer,minion_width); //minion_width是当前窗口的宽度
-            player->playerType = 2;
+            player->playerType = 1;
             bullet->render(renderer, playerX, playerY, player); //常规子弹的渲染
             drop ->render(renderer);
             this->fontrender(width);
@@ -324,6 +328,7 @@ void Background::render() { //设定渲染器的函数
                                         score += 2;
                                     }
                                     drop->add_drop((*itMinion)->position, (*itMinion)->drop_num);
+                                    explosions ->add_explosion((*itMinion)->position,(*itMinion)->type);
                                     controller->minion_elimination((*itMinion));
                                     itMinion = minion->positions.erase(itMinion);
                                 }
@@ -404,6 +409,7 @@ void Background::render() { //设定渲染器的函数
                                         score+=2;
                                     }
                                     drop ->add_drop((*itMinion)->position,(*itMinion)->drop_num);
+                                    explosions ->add_explosion((*itMinion)->position,(*itMinion)->type);
                                     controller->minion_elimination((*itMinion));
                                     itMinion = minion->positions.erase(itMinion);
                                 }
@@ -478,6 +484,7 @@ void Background::render() { //设定渲染器的函数
                                 }
                                 drop ->add_drop((*itMinion)->position,(*itMinion)->drop_num);
                                 controller->minion_elimination((*itMinion));
+                                explosions ->add_explosion((*itMinion)->position,(*itMinion)->type);
                                 itMinion = minion->positions.erase(itMinion);
                             }
                         } else {
@@ -508,6 +515,7 @@ void Background::render() { //设定渲染器的函数
                 }
             }
         }
+        explosions->render_explosion(renderer);
         if (minion->check_collision(playerX,playerY,player->playerWidth,player->playerHeight)){
                 state = END;
         }
