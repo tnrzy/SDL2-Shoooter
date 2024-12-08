@@ -7,7 +7,7 @@
 
 #endif
 
-int main() {
+int main(int argc, char *argv[]) {
     Background background;
     background.init();
     background.gameplay();

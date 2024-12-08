@@ -1,12 +1,12 @@
 # ninja log v6
-406	676	7529427448384568	main.cpp.exe	bcb9b03362dfdc4c
 284	2734	7540378244548340	src/CMakeFiles/untitled.dir/input.cpp.obj	49ddb6c59755974
 876	1141	7529434313891204	tt.cpp.exe	4b00648e4d0539e2
-1	225	7553883638283134	build.ninja	7f37b6c5e6e2eb19
+406	676	7529427448384568	main.cpp.exe	bcb9b03362dfdc4c
+1	225	7553890581088347	build.ninja	7f37b6c5e6e2eb19
 3639	3915	7530348006183138	untitled.exe	654bac9187621c5e
+3	1330	7550202163443022	src/CMakeFiles/untitled.dir/main.cpp.obj	29588a380e3affd4
 6	1131	7540389943662585	src/CMakeFiles/untitled.dir/draw.cpp.obj	792227d688e2a972
 2	840	7530377321938266	src/CMakeFiles/untitled.dir/main.c.obj	c7221a966e27c3b5
-3	1330	7550202163443022	src/CMakeFiles/untitled.dir/main.cpp.obj	29588a380e3affd4
 1147	1248	7550258398593777	src/untitled.exe	ef4350f128f0d4ba
 2	1362	7530370185177854	src/CMakeFiles/Window.cpp.dir/Window.cpp.obj	ee2ac6df2f015c2c
 4	860	7530388309962058	src/CMakeFiles/untitled.dir/draw.c.obj	381067e40befcb71
@@ -21,3 +21,14 @@
 15	1419	7550202163564152	src/CMakeFiles/untitled.dir/drop_items.cpp.obj	b861a6ec16cbd5d1
 42	1323	7550202163836031	src/CMakeFiles/untitled.dir/boss.cpp.obj	86589be2e973719f
 48	1392	7550202163896088	src/CMakeFiles/untitled.dir/enemy_control.cpp.obj	f9d221c0c03c75d1
+1	222	7553890581088347	build.ninja	af6acb02e76ad632
+24	1235	7553890581486678	src/CMakeFiles/untitled.dir/Player.cpp.obj	2b98b6748315f54e
+1	1240	7553890581264583	src/CMakeFiles/untitled.dir/main.cpp.obj	29588a380e3affd4
+44	1255	7553890581688937	src/CMakeFiles/untitled.dir/enemy_control.cpp.obj	f9d221c0c03c75d1
+12	1321	7553890581376598	src/CMakeFiles/untitled.dir/drop_items.cpp.obj	b861a6ec16cbd5d1
+30	1353	7553890581556870	src/CMakeFiles/untitled.dir/bullet.cpp.obj	1176e321ab6c301c
+51	1429	7553890581756373	src/CMakeFiles/untitled.dir/minion_explosion.cpp.obj	7a7f525d3a162224
+7	1487	7553890581316554	src/CMakeFiles/untitled.dir/background.cpp.obj	93179a96703638df
+18	1490	7553890581426679	src/CMakeFiles/untitled.dir/enemy.cpp.obj	42cfdfcf933f80a3
+36	1514	7553890581617059	src/CMakeFiles/untitled.dir/boss.cpp.obj	86589be2e973719f
+1514	1623	7553890596396874	src/untitled.exe	3f85076f69e79e04

@@ -5,6 +5,7 @@
 
 #include "../include/background.h"
 #include "../include/enemy.h"
+#include "../include/boss.h"
 #include "../include/Player.h"
 #include "../include/enemy_control.h"
 #include "../include/minion_explosion.h"
@@ -60,6 +61,10 @@ Background::~Background() { //销毁函数
 
     if (minion) {
         delete minion;
+    }
+
+    if (boss) {
+        delete boss;
     }
 
     if (player) {
@@ -120,7 +125,7 @@ void Background::init() { //用于初始化的函数
 
     TTF_Init();
     backgroundSurface = IMG_LoadJPG_RW(SDL_RWFromFile("res/png/start.jpg", "rb"));
-    minion_width = backgroundSurface->w * 0.8; //选择产生的宽度为背景图片的0.8倍
+    minion_width = backgroundSurface->w; //选择产生的宽度为背景图片的1倍
     window_height = backgroundSurface->h;
     playerX = backgroundSurface->w / 2;
     playerY = backgroundSurface->h / 2;
@@ -149,6 +154,7 @@ void Background::gameplay() { //游戏进程函数
     bullet = new Bullet(renderer);
     player = new Player(renderer);
     minion = new Enemy(renderer);
+    boss = new Boss(renderer);
     drop = new drop_items(renderer);
     controller = new enemy_controller();
     explosions = new minion_explosion(renderer);
@@ -253,6 +259,7 @@ void Background::render() { //设定渲染器的函数
             SDL_RenderCopy(renderer, backgroundTexture, NULL, NULL);
 
             delete minion;
+            delete boss;
             delete bullet;
             delete player; //删除对象达到重新开始的效果,再次开始时需要重新创建
             delete drop;
@@ -261,6 +268,7 @@ void Background::render() { //设定渲染器的函数
             bullet = new Bullet(renderer);
             player = new Player(renderer);
             minion = new Enemy(renderer);
+            boss = new Boss(renderer);
             drop = new drop_items(renderer);
             explosions = new minion_explosion(renderer);
             controller = new enemy_controller();
@@ -272,6 +280,7 @@ void Background::render() { //设定渲染器的函数
 
             player -> render(playerX, playerY); //利用传入的数据刷新player的渲染器；在此处渲染是为了保证每次渲染屏幕时，player都会被渲染到
             minion->render(renderer,minion_width); //minion_width是当前窗口的宽度
+            boss -> render(renderer,minion_width);
             player->playerType = 2;
             bullet->render(renderer, playerX, playerY, player); //常规子弹的渲染
             drop ->render(renderer);
@@ -328,7 +337,7 @@ void Background::render() { //设定渲染器的函数
                                         score += 2;
                                     }
                                     drop->add_drop((*itMinion)->position, (*itMinion)->drop_num);
-                                    explosions ->add_explosion((*itMinion)->position,(*itMinion)->type);
+                                    //explosions ->add_explosion((*itMinion)->position,(*itMinion)->type);
                                     controller->minion_elimination((*itMinion));
                                     itMinion = minion->positions.erase(itMinion);
                                 }
@@ -361,6 +370,83 @@ void Background::render() { //设定渲染器的函数
                     }
                     if (itMinion != minion->positions.end()) {
                         ++itMinion;
+                    }
+                }
+                for (auto bosses = boss->positions.begin(); bosses != boss->positions.end();) {
+                    if ((*bosses)->position.y > window_height + 50) {
+                        bosses = boss->positions.erase(bosses);
+                        continue;
+                    }
+                    for (auto itBullet = bullet->bulletPosition.begin(); itBullet != bullet->bulletPosition.end();) {
+                        //对子弹的检测
+                        if (itBullet->x + bullet->width>= (*bosses)->position.x
+                            && itBullet->x <= ((*bosses)->position.x + boss->widths[(*bosses)->type])
+                            && itBullet->y + bullet->height >= (*bosses)->position.y
+                            && itBullet->y <= ((*bosses)->position.y + boss->heights[(*bosses)->type])) {
+                            if (itBullet != bullet->bulletPosition.end()) {
+                                //防止数组越界
+                                itBullet = bullet->bulletPosition.erase(itBullet);
+                            } else {
+                                bullet->bulletPosition.pop_back();
+                            }
+                            if (bosses != boss->positions.end()) {
+                                //防止数组越界
+                                (*bosses)->health = (*bosses)->health - 1;
+                                double k = (minion_width-12) * ((*bosses)->health)/((*bosses)->max_health);
+                                (*bosses)->health_bar.w = static_cast<int>(std::round(k));
+                                if ((*bosses)->health == 0) {
+                                    beated_enemy += 1;
+                                    int sco = (*bosses)->type;
+                                    if (sco == 2) {
+                                        if (magic_point <= 4) {
+                                            magic_point += 0.1;
+                                        }
+                                        score += 1;
+                                    } else if (sco == 1) {
+                                        if (magic_point <= 4) {
+                                            magic_point += 0.3;
+                                        }
+                                        score += 3;
+                                    } else if (sco == 0) {
+                                        if (magic_point <= 4) {
+                                            magic_point += 0.2;
+                                        }
+                                        score += 2;
+                                    }
+                                    drop->add_drop((*bosses)->position, (*bosses)->drop_num);
+                                    //explosions ->add_explosion((*bosses)->position,(*bosses)->type);
+                                    //controller->boss_elimination((*bosses));
+                                    bosses = boss->positions.erase(bosses);
+                                }
+                            } else {
+                                beated_enemy += 1;
+                                int sco = (*bosses)->type;
+                                if (sco == 2) {
+                                    if (magic_point <= 4) {
+                                        magic_point += 0.1;
+                                    }
+                                    score += 1;
+                                } else if (sco == 1) {
+                                    if (magic_point <= 4) {
+                                        magic_point += 0.3;
+                                    }
+                                    score += 3;
+                                } else if (sco == 0) {
+                                    if (magic_point <= 4) {
+                                        magic_point += 0.2;
+                                    }
+                                    score += 2;
+                                }
+                                boss->positions.pop_back();
+                            }
+                        } else {
+                            if (itBullet != bullet->bulletPosition.end()) {
+                                ++itBullet;
+                            }
+                        }
+                    }
+                    if (bosses != boss->positions.end()) {
+                        ++bosses;
                     }
                 }
             }
@@ -409,7 +495,7 @@ void Background::render() { //设定渲染器的函数
                                         score+=2;
                                     }
                                     drop ->add_drop((*itMinion)->position,(*itMinion)->drop_num);
-                                    explosions ->add_explosion((*itMinion)->position,(*itMinion)->type);
+                                    //explosions ->add_explosion((*itMinion)->position,(*itMinion)->type);
                                     controller->minion_elimination((*itMinion));
                                     itMinion = minion->positions.erase(itMinion);
                                 }
@@ -437,6 +523,69 @@ void Background::render() { //设定渲染器的函数
                         }
                         if (itMinion != minion->positions.end()) {
                             ++itMinion;
+                        }
+                    }
+                    for (auto bosses = boss->positions.begin(); bosses != boss->positions.end();) {
+                        if ((*bosses)->position.y > window_height+ 50){
+                            bosses = boss->positions.erase(bosses);
+                            continue;
+                        }
+                        if ((*bosses)->position.x + boss->widths[(*bosses)->type] >= (playerX + player->playerWidth/2) - bullet->width*(bullet->firePoint)/2 &&
+                        (*bosses)->position.x <= (playerX + player->playerWidth/2) + bullet->width*(bullet->firePoint)/2 &&
+                        (*bosses)->position.y <= playerY &&
+                        (*bosses)->position.y + boss->heights[(*bosses)->type] >= playerY - bullet->height*(bullet->firePoint)) {
+                            if (bosses != boss->positions.end()) { //防止数组越界
+                                (*bosses)->health = (*bosses)->health - 0.1;
+                                double k = (minion_width-12) * ((*bosses)->health)/((*bosses)->max_health);
+                                (*bosses)->health_bar.w = static_cast<int>(std::round(k));
+                                if ((*bosses)->health <= 0){
+                                    beated_enemy+=1;
+                                    int sco = (*bosses)->type;
+                                    if (sco == 2) {
+                                        if (magic_point<=4) {
+                                            magic_point+=0.1;
+                                        }
+                                        score+=1;
+                                    }else if (sco == 1) {
+                                        if (magic_point<=4) {
+                                            magic_point+=0.3;
+                                        }
+                                        score+=3;
+                                    }else if (sco == 0) {
+                                        if (magic_point<=4) {
+                                            magic_point+=0.2;
+                                        }
+                                        score+=2;
+                                    }
+                                    drop ->add_drop((*bosses)->position,(*bosses)->drop_num);
+                                    //explosions ->add_explosion((*bosses)->position,(*bosses)->type);
+                                    //controller->boss_elimination((*bosses));
+                                    bosses = boss->positions.erase(bosses);
+                                }
+                            } else {
+                                beated_enemy+=1;
+                                int sco = (*bosses)->type;
+                                if (sco == 2) {
+                                    if (magic_point<=4) {
+                                        magic_point+=0.1;
+                                    }
+                                    score+=1;
+                                }else if (sco == 1) {
+                                    if (magic_point<=4) {
+                                        magic_point+=0.3;
+                                    }
+                                    score+=3;
+                                }else if (sco == 0) {
+                                    if (magic_point<=4) {
+                                        magic_point+=0.2;
+                                    }
+                                    score+=2;
+                                }
+                                boss->positions.pop_back();
+                            }
+                        }
+                        if (bosses != boss->positions.end()) {
+                            ++bosses;
                         }
                     }
                 }
@@ -484,7 +633,7 @@ void Background::render() { //设定渲染器的函数
                                 }
                                 drop ->add_drop((*itMinion)->position,(*itMinion)->drop_num);
                                 controller->minion_elimination((*itMinion));
-                                explosions ->add_explosion((*itMinion)->position,(*itMinion)->type);
+                                //explosions ->add_explosion((*itMinion)->position,(*itMinion)->type);
                                 itMinion = minion->positions.erase(itMinion);
                             }
                         } else {
@@ -513,9 +662,70 @@ void Background::render() { //设定渲染器的函数
                         ++itMinion;
                     }
                 }
+                for (auto bosses = boss->positions.begin(); bosses != boss->positions.end();) {
+                    if ((*bosses)->position.y > window_height+ 50){
+                        bosses = boss->positions.erase(bosses);
+                        continue;
+                    }
+                    if ((*bosses)->position.x + boss->widths[(*bosses)->type] >= (playerX + player->playerWidth/2) - bullet->width/2 &&
+                    (*bosses)->position.x <= (playerX + player->playerWidth/2) + bullet->width/2 ) {
+                        if (bosses != boss->positions.end()) { //防止数组越界
+                            (*bosses)->health = (*bosses)->health - 0.1;
+                            double k = (minion_width-12) * ((*bosses)->health)/((*bosses)->max_health);
+                            (*bosses)->health_bar.w = static_cast<int>(std::round(k));
+                            if ((*bosses)->health <= 0){
+                                beated_enemy+=1;
+                                int sco = (*bosses)->type;
+                                if (sco == 2) {
+                                    if (magic_point<=4) {
+                                        magic_point+=0.1;
+                                    }
+                                    score+=1;
+                                }else if (sco == 1) {
+                                    if (magic_point<=4) {
+                                        magic_point+=0.3;
+                                    }
+                                    score+=3;
+                                }else if (sco == 0) {
+                                    if (magic_point<=4) {
+                                        magic_point+=0.2;
+                                    }
+                                    score+=2;
+                                }
+                                drop ->add_drop((*bosses)->position,(*bosses)->drop_num);
+                                //controller->minion_elimination((*bosses));
+                                //explosions ->add_explosion((*bosses)->position,(*bosses)->type);
+                                bosses = boss->positions.erase(bosses);
+                            }
+                        } else {
+                            beated_enemy+=1;
+                            int sco = (*bosses)->type;
+                            if (sco == 2) {
+                                if (magic_point<=4) {
+                                    magic_point+=0.1;
+                                }
+                                score+=1;
+                            }else if (sco == 1) {
+                                if (magic_point<=4) {
+                                    magic_point+=0.3;
+                                }
+                                score+=3;
+                            }else if (sco == 0) {
+                                if (magic_point<=4) {
+                                    magic_point+=0.2;
+                                }
+                                score+=2;
+                            }
+                            boss->positions.pop_back();
+                        }
+                    }
+                    if (bosses != boss->positions.end()) {
+                        ++bosses;
+                    }
+                }
             }
         }
-        explosions->render_explosion(renderer);
+        //explosions->render_explosion(renderer);
         if (minion->check_collision(playerX,playerY,player->playerWidth,player->playerHeight)){
                 state = END;
         }

@@ -133,6 +133,13 @@ build src/CMakeFiles/untitled.dir/enemy_control.cpp.obj: CXX_COMPILER__untitled_
   OBJECT_DIR = src\CMakeFiles\untitled.dir
   OBJECT_FILE_DIR = src\CMakeFiles\untitled.dir
 
+build src/CMakeFiles/untitled.dir/minion_explosion.cpp.obj: CXX_COMPILER__untitled_unscanned_Debug I$:/MoyuanCodes/test/untitled/src/minion_explosion.cpp || cmake_object_order_depends_target_untitled
+  DEP_FILE = src\CMakeFiles\untitled.dir\minion_explosion.cpp.obj.d
+  FLAGS = -g -std=gnu++20 -fdiagnostics-color=always
+  INCLUDES = -II:/MoyuanCodes/test/untitled/include
+  OBJECT_DIR = src\CMakeFiles\untitled.dir
+  OBJECT_FILE_DIR = src\CMakeFiles\untitled.dir
+
 
 # =============================================================================
 # Link build statements for EXECUTABLE target untitled
@@ -141,7 +148,7 @@ build src/CMakeFiles/untitled.dir/enemy_control.cpp.obj: CXX_COMPILER__untitled_
 #############################################
 # Link the executable src\untitled.exe
 
-build src/untitled.exe: CXX_EXECUTABLE_LINKER__untitled_Debug src/CMakeFiles/untitled.dir/main.cpp.obj src/CMakeFiles/untitled.dir/background.cpp.obj src/CMakeFiles/untitled.dir/drop_items.cpp.obj src/CMakeFiles/untitled.dir/enemy.cpp.obj src/CMakeFiles/untitled.dir/Player.cpp.obj src/CMakeFiles/untitled.dir/bullet.cpp.obj src/CMakeFiles/untitled.dir/boss.cpp.obj src/CMakeFiles/untitled.dir/enemy_control.cpp.obj
+build src/untitled.exe: CXX_EXECUTABLE_LINKER__untitled_Debug src/CMakeFiles/untitled.dir/main.cpp.obj src/CMakeFiles/untitled.dir/background.cpp.obj src/CMakeFiles/untitled.dir/drop_items.cpp.obj src/CMakeFiles/untitled.dir/enemy.cpp.obj src/CMakeFiles/untitled.dir/Player.cpp.obj src/CMakeFiles/untitled.dir/bullet.cpp.obj src/CMakeFiles/untitled.dir/boss.cpp.obj src/CMakeFiles/untitled.dir/enemy_control.cpp.obj src/CMakeFiles/untitled.dir/minion_explosion.cpp.obj
   FLAGS = -g
   LINK_LIBRARIES = -lmingw32  -lSDL2main  -lSDL2  -lSDL2_image  -lSDL2_ttf  -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
   OBJECT_DIR = src\CMakeFiles\untitled.dir

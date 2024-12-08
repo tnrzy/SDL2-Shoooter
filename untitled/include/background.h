@@ -8,6 +8,7 @@
 
 #include <SDL2/SDL.h>
 #include "enemy.h"
+#include "boss.h"
 #include "Player.h"
 #include "bullet.h"
 #include <cstdio>
@@ -64,6 +65,7 @@ private:
     Sint32 playerX;
     Sint32 playerY;
 
+    Boss *boss;
     Bullet *bullet;
     drop_items *drop;
     enemy_controller *controller;
