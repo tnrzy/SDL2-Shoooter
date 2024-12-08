@@ -337,7 +337,7 @@ void Background::render() { //设定渲染器的函数
                                         score += 2;
                                     }
                                     drop->add_drop((*itMinion)->position, (*itMinion)->drop_num);
-                                    //explosions ->add_explosion((*itMinion)->position,(*itMinion)->type);
+                                    explosions ->add_explosion((*itMinion)->position,(*itMinion)->type);
                                     controller->minion_elimination((*itMinion));
                                     itMinion = minion->positions.erase(itMinion);
                                 }
@@ -495,7 +495,7 @@ void Background::render() { //设定渲染器的函数
                                         score+=2;
                                     }
                                     drop ->add_drop((*itMinion)->position,(*itMinion)->drop_num);
-                                    //explosions ->add_explosion((*itMinion)->position,(*itMinion)->type);
+                                    explosions ->add_explosion((*itMinion)->position,(*itMinion)->type);
                                     controller->minion_elimination((*itMinion));
                                     itMinion = minion->positions.erase(itMinion);
                                 }
@@ -633,7 +633,7 @@ void Background::render() { //设定渲染器的函数
                                 }
                                 drop ->add_drop((*itMinion)->position,(*itMinion)->drop_num);
                                 controller->minion_elimination((*itMinion));
-                                //explosions ->add_explosion((*itMinion)->position,(*itMinion)->type);
+                                explosions ->add_explosion((*itMinion)->position,(*itMinion)->type);
                                 itMinion = minion->positions.erase(itMinion);
                             }
                         } else {
@@ -725,7 +725,7 @@ void Background::render() { //设定渲染器的函数
                 }
             }
         }
-        //explosions->render_explosion(renderer);
+        explosions->render_explosion(renderer);
         if (minion->check_collision(playerX,playerY,player->playerWidth,player->playerHeight)){
                 state = END;
         }

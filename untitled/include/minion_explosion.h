@@ -20,7 +20,7 @@ public:
             this -> x = x;
             this -> y = y;
             this -> timer = 0;
-            int pivot = 0;
+            this -> pivot = 0;
             this -> type = type;
             this -> done = false;
             if (type == 0 ){

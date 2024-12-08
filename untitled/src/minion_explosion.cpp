@@ -10,6 +10,7 @@ minion_explosion::minion_explosion(SDL_Renderer *renderer) {
     }
     explosion0.reserve(7);
     explosion1.reserve(10);
+    explosion2.reserve(9);
     positions.reserve(100);
     for (int i = 0; i < 7; i++) {
         std::string path = "res/png/explosion/explosion0/exp0" + std::to_string(i) + ".png";
@@ -100,13 +101,18 @@ void minion_explosion::render_explosion(SDL_Renderer *renderer) {
     if (!positions.empty()) {
         for (auto itExp = positions.begin(); itExp != positions.end();) {
             if ((*itExp)->done){
-                positions.erase(itExp);
+                itExp=positions.erase(itExp);
+                continue;
             }
-            doexp((*itExp),(*itExp)->type, renderer);
+            if (itExp != positions.end()) {
+                doexp((*itExp),(*itExp)->type, renderer);
+            }
+            else {
+                positions.pop_back();
+            }
             if (itExp != positions.end()) {
                 ++itExp;
             }
-
         }
     }
 }
