@@ -272,7 +272,7 @@ void Background::render() { //设定渲染器的函数
 
             player -> render(playerX, playerY); //利用传入的数据刷新player的渲染器；在此处渲染是为了保证每次渲染屏幕时，player都会被渲染到
             minion->render(renderer,minion_width); //minion_width是当前窗口的宽度
-            player->playerType = 1;
+            player->playerType = 2;
             bullet->render(renderer, playerX, playerY, player); //常规子弹的渲染
             drop ->render(renderer);
             this->fontrender(width);

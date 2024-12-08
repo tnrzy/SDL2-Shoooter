@@ -27,6 +27,14 @@ public:
                 auto exp = SDL_Rect(x,y,162,162);
                 this->rect = exp;
             }
+            if (type == 1){
+                auto exp = SDL_Rect(x,y,60,60);
+                this->rect = exp;
+            }
+            if (type == 2){
+                auto exp = SDL_Rect(x,y,280,280);
+                this->rect = exp;
+            }
 
 
         }
@@ -37,6 +45,8 @@ public:
 protected:
     std::vector<explosion_info*> positions;
     std::vector<SDL_Texture *> explosion0;
+    std::vector<SDL_Texture *> explosion1;
+    std::vector<SDL_Texture *> explosion2;
     FILE *myLog;
     bool done;
 
