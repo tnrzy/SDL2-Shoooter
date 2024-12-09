@@ -292,7 +292,7 @@ void Background::render() { //设定渲染器的函数
                     }
                     else{
                         if ((*itdrop)->rect.y > playerY && (*itdrop)->rect.y < playerY + player->playerHeight &&
-                            (*itdrop)->rect.x > playerX - width && (*itdrop)->rect.x < playerX + player->playerWidth) {
+                            (*itdrop)->rect.x > playerX - drop->width && (*itdrop)->rect.x < playerX + player->playerWidth) {
                             drop->dropposition.erase(itdrop);
                         }
                     }
@@ -465,7 +465,7 @@ void Background::render() { //设定渲染器的函数
                         }
                         else{
                             if ((*itdrop)->rect.y > playerY && (*itdrop)->rect.y < playerY + player->playerHeight &&
-                                (*itdrop)->rect.x > playerX - width && (*itdrop)->rect.x < playerX + player->playerWidth) {
+                                (*itdrop)->rect.x > playerX - drop->width && (*itdrop)->rect.x < playerX + player->playerWidth) {
                                 drop->dropposition.erase(itdrop);
                             }
                         }
@@ -611,7 +611,7 @@ void Background::render() { //设定渲染器的函数
                         }
                         else{
                             if ((*itdrop)->rect.y > playerY && (*itdrop)->rect.y < playerY + player->playerHeight &&
-                                (*itdrop)->rect.x > playerX - width && (*itdrop)->rect.x < playerX + player->playerWidth) {
+                                (*itdrop)->rect.x > playerX - drop->width && (*itdrop)->rect.x < playerX + player->playerWidth) {
                                 drop->dropposition.erase(itdrop);
                             }
                         }
