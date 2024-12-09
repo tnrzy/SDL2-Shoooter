@@ -57,7 +57,7 @@ public:
 
     ~Enemy();
 
-    void render(SDL_Renderer *renderer, int width); //用于敌人的渲染
+    void render(SDL_Renderer *renderer, int width,bool generating); //用于敌人的渲染
 
     void start(); //用于开始计时
     std::vector<enemy_info*> positions;

@@ -17,12 +17,12 @@ public:
             if (type == 0){
                 this->position = minionrect;
                 this->type = 0;
-                this->dy = 2;
+                this->score = 10;
                 this->health = 100;
                 this ->max_health = 100;
                 this ->health_bar = health_bar;
                 this ->health_bar_back = health_bar_back;
-                this ->drop_num = 2;
+                this ->drop_num = 30;
 
 
             }
@@ -40,6 +40,7 @@ public:
 
         SDL_Rect position;
         int dy;
+        int score;
         int type;
         double health;
         int max_health;

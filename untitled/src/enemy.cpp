@@ -40,12 +40,12 @@ Enemy::~Enemy() {
     }
 }
 
-void Enemy::render(SDL_Renderer *renderer, int wide) { //需要获取窗口的宽度；需要随机刷新敌机
+void Enemy::render(SDL_Renderer *renderer, int wide,bool generating) { //需要获取窗口的宽度；需要随机刷新敌机
     uint32_t stopTime = SDL_GetTicks(); //stopTime随着call该render函数，每次都在更新
     static std::uniform_int_distribution<int> distribution(0, wide);
     static std::uniform_int_distribution<int> type_distribution(0,type_num-1);
     SDL_SetRenderDrawColor(renderer,255,0,0,255);
-    if (stopTime - startTime >= 800) { //每个ms刷新一次敌机；渲染的时间可能大于ms，所以用大于号
+    if (stopTime - startTime >= 800&&generating) { //每个ms刷新一次敌机；渲染的时间可能大于ms，所以用大于号
         generator.seed((unsigned)time(nullptr) + generator()); //对随机数种子更新
 
         int minionPositionX = distribution(generator); //随机产生敌机的坐标
