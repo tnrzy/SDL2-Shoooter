@@ -725,6 +725,7 @@ void Background::render() { //设定渲染器的函数
                 }
             }
         }
+        int e = drop ->collect(playerX,playerY,player->playerWidth,player->playerHeight);
         explosions->render_explosion(renderer);
         if (minion->check_collision(playerX,playerY,player->playerWidth,player->playerHeight)){
                 state = END;

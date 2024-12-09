@@ -57,6 +57,27 @@ void drop_items::add_drop(SDL_Rect rect, int num) {
     }
 
 }
+int drop_items::collect(int playerX, int playerY, int playerW, int playerH) {
+    int ans = 0;
+    if (!dropposition.empty()){
+        for (auto itdrop = dropposition.begin(); itdrop != dropposition.end();) {
+            if ((*itdrop)->rect.y > playerY && (*itdrop)->rect.y < playerY + playerH &&
+                (*itdrop)->rect.x > playerX - width && (*itdrop)->rect.x < playerX + playerW) {
+
+                if (itdrop != dropposition.end()) {
+                    ans++;
+                    itdrop = dropposition.erase(itdrop);
+                } else {
+                    dropposition.pop_back();
+                }
+            }
+                if (itdrop != dropposition.end()) {
+                    ++itdrop;
+                }
+        }
+        return ans;
+    }
+}
 void drop_items::render(SDL_Renderer *renderer) {
     if (!dropposition.empty()){
         for(int i = 0; i < dropposition.size(); i++){
