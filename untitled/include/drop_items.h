@@ -25,7 +25,6 @@ public:
     ~drop_items();
     void render(SDL_Renderer *renderer);
     void add_drop(SDL_Rect rect,int num);
-    int collect(int playerX, int playerY, int playerW, int playerH);
     //void start();
     //void update_pos();
     std::vector<drop_info*> dropposition;

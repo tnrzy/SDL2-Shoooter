@@ -57,13 +57,14 @@ public:
 
     ~Enemy();
 
-    void render(SDL_Renderer *renderer, int width,bool generating); //用于敌人的渲染
+    void render(SDL_Renderer *renderer, int width,bool generating);//用于敌人的渲染
 
     void start(); //用于开始计时
     std::vector<enemy_info*> positions;
     std::vector<SDL_Rect> minionPosition; //要让自机和子弹知道敌机的位置信息
     std::vector<int> widths;
     std::vector<int> heights;
+
 
     bool check_collision(int playerX, int playerY, int player_width, int player_height);
 

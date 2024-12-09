@@ -45,6 +45,7 @@ public:
     // 渲染函数
     void render();
     void fontrender(int height);
+    void skillrender(int skill_type);
 
 private:
     SDL_Window *window;
@@ -73,6 +74,9 @@ private:
     double magic_point;
     int beated_enemy;
     int score;
+    int skill_state;
+    uint32_t skill_time;
+    int dropnumber;
 };
 
 #endif // BACKGROUND_H

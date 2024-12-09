@@ -16,8 +16,8 @@ public:
     ~enemy_controller();
     void updatestage(Enemy *minions , Boss *boss);
 
-    void minion_elimination(Enemy::enemy_info *enemyinfo);
 
+    void minion_elimination(Enemy::enemy_info *enemyinfo);
 
     void renderenemies(Enemy *minions, Boss *boss, SDL_Renderer *renderer, int wide);
 };

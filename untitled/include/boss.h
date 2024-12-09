@@ -40,8 +40,8 @@ public:
 
         SDL_Rect position;
         int dy;
-        int score;
         int type;
+        int score;
         double health;
         int max_health;
         SDL_Rect health_bar;

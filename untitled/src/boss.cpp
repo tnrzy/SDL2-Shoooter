@@ -5,7 +5,7 @@
 #include "../include/common.h"
 #include "../include/background.h"
 
-#include "../include/background.h"
+#include <background.h>
 
 #include "../include/common.h"
 

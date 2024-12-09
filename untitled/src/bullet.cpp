@@ -78,12 +78,12 @@ void Bullet::LightRender (SDL_Renderer *renderer) {
     bulletSurface = nullptr;
 }
 
-void Bullet::render(SDL_Renderer *renderer, int x, int y, Player *player) { //需要获取窗口的宽度；需要随机刷新敌机
+void Bullet::render(SDL_Renderer *renderer, int x, int y, Player *player,double magic_point) { //需要获取窗口的宽度；需要随机刷新敌机
     uint32_t stopTime = SDL_GetTicks(); //stopTime随着call该render函数，每次都在更新
     static int fireCount = 0;
-
+    double piece=400/magic_point;
     if (player->playerType == 0) {
-        if (stopTime - startTime >= 400) { //每个ms刷新一次子弹；渲染的时间可能大于ms，所以用大于号
+        if (stopTime - startTime >= piece) { //每个ms刷新一次子弹；渲染的时间可能大于ms，所以用大于号
             SDL_Rect bulletRect = {x + (player->playerWidth/2)-width/2, y,width,height}; //x,y是自机的坐标
             if (attack == true) {
                 bulletPosition.push_back(bulletRect);
@@ -91,7 +91,7 @@ void Bullet::render(SDL_Renderer *renderer, int x, int y, Player *player) { //�
             startTime = stopTime; //刷新一次子弹后，startTime会被更新一次
         }
         if (!bulletPosition.empty()) { //读取并生成子弹
-            int dy = 5; //子弹的速度
+            int dy = 5*magic_point; //子弹的速度
             for (int i = 0; i < bulletPosition.size(); i++) {
                 bulletPosition[i].y -= dy;
                 if (bulletPosition[i].y < 0) {

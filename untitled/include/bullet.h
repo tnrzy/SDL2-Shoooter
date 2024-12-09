@@ -14,7 +14,7 @@ public:
 
     void FireRender (SDL_Renderer *renderer, int fireCount);
     void LightRender (SDL_Renderer *renderer);
-    void render(SDL_Renderer *renderer, int x, int y, Player *player); //用于渲染
+    void render(SDL_Renderer *renderer, int x, int y, Player *player, double magic_point); //用于渲染
 
     void start(); //用于开始计时
 
