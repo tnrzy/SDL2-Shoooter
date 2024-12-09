@@ -290,6 +290,12 @@ void Background::render() { //设定渲染器的函数
                     if((*itdrop)->rect.y > window_height + 50){
                         drop->dropposition.erase(itdrop);
                     }
+                    else{
+                        if ((*itdrop)->rect.y > playerY && (*itdrop)->rect.y < playerY + player->playerHeight &&
+                            (*itdrop)->rect.x > playerX - width && (*itdrop)->rect.x < playerX + player->playerWidth) {
+                            drop->dropposition.erase(itdrop);
+                        }
+                    }
                     if (itdrop != drop->dropposition.end()) {
                         ++itdrop;
                     }
@@ -457,6 +463,12 @@ void Background::render() { //设定渲染器的函数
                         if((*itdrop)->rect.y > window_height + 50){
                             drop->dropposition.erase(itdrop);
                         }
+                        else{
+                            if ((*itdrop)->rect.y > playerY && (*itdrop)->rect.y < playerY + player->playerHeight &&
+                                (*itdrop)->rect.x > playerX - width && (*itdrop)->rect.x < playerX + player->playerWidth) {
+                                drop->dropposition.erase(itdrop);
+                            }
+                        }
                         if (itdrop != drop->dropposition.end()) {
                             ++itdrop;
                         }
@@ -597,6 +609,12 @@ void Background::render() { //设定渲染器的函数
                         if ((*itdrop)->rect.y > window_height + 50) {
                             drop->dropposition.erase(itdrop);
                         }
+                        else{
+                            if ((*itdrop)->rect.y > playerY && (*itdrop)->rect.y < playerY + player->playerHeight &&
+                                (*itdrop)->rect.x > playerX - width && (*itdrop)->rect.x < playerX + player->playerWidth) {
+                                drop->dropposition.erase(itdrop);
+                            }
+                        }
                         if (itdrop != drop->dropposition.end()) {
                             ++itdrop;
                         }
@@ -725,7 +743,9 @@ void Background::render() { //设定渲染器的函数
                 }
             }
         }
-        int e = drop ->collect(playerX,playerY,player->playerWidth,player->playerHeight);
+
+
+        //int e = drop ->collect(playerX,playerY,player->playerWidth,player->playerHeight);
         explosions->render_explosion(renderer);
         if (minion->check_collision(playerX,playerY,player->playerWidth,player->playerHeight)){
                 state = END;
