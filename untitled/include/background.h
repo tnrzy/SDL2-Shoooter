@@ -62,7 +62,6 @@ private:
     Enemy *minion;
     int minion_width; //minion_width是当前窗口的宽度
     int window_height;
-    int width;
     Player *player;
     Sint32 playerX;
     Sint32 playerY;

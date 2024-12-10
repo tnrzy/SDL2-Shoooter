@@ -18,7 +18,7 @@ Boss::Boss(SDL_Renderer *renderer) : minionSurface(nullptr), minionTexture(nullp
     widths.reserve(type_num+2);
     heights.reserve(type_num+2);
     for (int i = 0; i < type_num; i++){
-        std::string path = "res/png/boss_plane" + std::to_string(i) + ".png";
+        std::string path = "res/png/boss/"+ std::to_string(i)+"/boss_plane" + std::to_string(i) + ".png";
         SDL_Surface *surf = IMG_LoadPNG_RW(SDL_RWFromFile(path.c_str(),"rb"));
         if (!surf) {
             fprintf(myLog, "SDL_Boss_Surface Error: %s\n", IMG_GetError());

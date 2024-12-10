@@ -8,4 +8,5 @@ add_executable(untitled
         boss.cpp
         enemy_control.cpp
         minion_explosion.cpp
+        minion_bullet.cpp
 )

@@ -313,7 +313,7 @@ void Background::render() { //设定渲染器的函数
             controller->renderenemies(minion,boss,renderer,minion_width);
             bullet->render(renderer, playerX, playerY, player,magic_point); //常规子弹的渲染
             drop ->render(renderer);
-            this->fontrender(width);
+            this->fontrender(minion_width);
             int skill_type = 0;
             if (skill_state == 1) {
                 skill_state = 0;
@@ -651,7 +651,7 @@ void Background::render() { //设定渲染器的函数
             for (auto addbullets : minion->positions){
                 mbullets->add_minion_bullet(addbullets->type, (*addbullets));
             }
-            mbullets->minion_bullet_render(renderer,width,window_height);
+            mbullets->minion_bullet_render(renderer,minion_width,window_height);
             explosions->render_explosion(renderer);
             if (minion->check_collision(playerX,playerY,player->playerWidth,player->playerHeight)||boss->check_collision(playerX,playerY,player->playerWidth,player->playerHeight)){
                 state = END;
