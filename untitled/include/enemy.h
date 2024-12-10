@@ -12,6 +12,7 @@ public:
 
     public:
         enemy_info(int type,SDL_Rect minionrect,SDL_Rect health_bar){
+            this ->bullet_timer = 0;
             if (type == 0){
                 this->position = minionrect;
                 this->type = 0;
@@ -43,7 +44,7 @@ public:
             }
 
         }
-
+        int bullet_timer;
         SDL_Rect position;
         int dy;
         int type;
@@ -67,7 +68,7 @@ public:
 
 
     bool check_collision(int playerX, int playerY, int player_width, int player_height);
-
+    void updateattack();
 protected: //可以设计子类访问
     int type_num = 3;
     SDL_Surface *minionSurface;
@@ -79,7 +80,6 @@ protected: //可以设计子类访问
     std::default_random_engine generator;
 
     uint32_t startTime; //因为Get_ticks函数用的是uint32类型
-
 };
 
 

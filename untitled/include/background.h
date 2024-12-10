@@ -18,6 +18,7 @@
 #include "enemy_control.h"
 #include "common.h"
 #include "minion_explosion.h"
+#include "minion_bullet.h"
 
 enum GameState {
     START,
@@ -71,6 +72,7 @@ private:
     drop_items *drop;
     enemy_controller *controller;
     minion_explosion *explosions;
+    minion_bullet *mbullets;
     double magic_point;
     int beated_enemy;
     int score;

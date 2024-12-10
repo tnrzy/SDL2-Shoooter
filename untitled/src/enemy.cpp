@@ -84,6 +84,21 @@ bool Enemy::check_collision(int playerX, int playerY,int player_width, int playe
     }
     return false;
 }
+void Enemy::updateattack(){
+    for (auto & enemy : positions) {
+        enemy->bullet_timer +=1;
+        if (enemy->type == 0) {
+            if (enemy->bullet_timer >= 300) {
+                enemy->bullet_timer = 0;
+            }
+        }
+        if (enemy ->type == 2){
+            if (enemy->bullet_timer >= 400) {
+                enemy->bullet_timer = 0;
+            }
+        }
+    }
+}
 void Enemy::start() {
     startTime = SDL_GetTicks(); //返回自初始化经过的毫秒数
 }

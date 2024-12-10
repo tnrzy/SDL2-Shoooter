@@ -160,6 +160,7 @@ void Background::gameplay() { //游戏进程函数
     drop = new drop_items(renderer);
     controller = new enemy_controller();
     explosions = new minion_explosion(renderer);
+    mbullets = new minion_bullet(renderer);
 
     SDL_Event event; //用于接受传入的各类事件
     uint32_t begin, end, elapsed, rate;
@@ -292,6 +293,7 @@ void Background::render() { //设定渲染器的函数
             delete drop;
             delete controller;
             delete explosions;
+            delete mbullets;
             bullet = new Bullet(renderer);
             player = new Player(renderer);
             minion = new Enemy(renderer);
@@ -299,6 +301,7 @@ void Background::render() { //设定渲染器的函数
             drop = new drop_items(renderer);
             explosions = new minion_explosion(renderer);
             controller = new enemy_controller();
+            mbullets = new minion_bullet(renderer);
 
             break;
         case PLAYING:
@@ -644,6 +647,11 @@ void Background::render() { //设定渲染器的函数
             if (magic_point>4) {
                 magic_point=4;
             }
+            minion -> updateattack();
+            for (auto addbullets : minion->positions){
+                mbullets->add_minion_bullet(addbullets->type, (*addbullets));
+            }
+            mbullets->minion_bullet_render(renderer,width,window_height);
             explosions->render_explosion(renderer);
             if (minion->check_collision(playerX,playerY,player->playerWidth,player->playerHeight)||boss->check_collision(playerX,playerY,player->playerWidth,player->playerHeight)){
                 state = END;
