@@ -174,6 +174,21 @@ void Background::gameplay() { //游戏进程函数
         int speed = 5;
 
         while (SDL_PollEvent(&event)) { //因为要修改event所以pass by ref; 用while是为了在一轮内把事件都处理完
+            if (event.type == SDL_MOUSEBUTTONDOWN) {
+                if (event.button.button == SDL_BUTTON_LEFT) {
+                    if (state != PLAYING) {
+                        state = PLAYING;
+                    }
+                    if (event.button.y > 0 && event.button.y < window_height/3) {
+                        player -> playerType = 0;
+                    } else if (event.button.y > window_height/3 && event.button.y < 2*window_height/3) {
+                        player -> playerType = 1;
+                    } else {
+                        player -> playerType = 2;
+                    }
+                }
+            }
+
             if (event.type == SDL_KEYDOWN) {
                 switch (event.key.keysym.sym) {
                     case SDLK_SPACE:
@@ -184,6 +199,7 @@ void Background::gameplay() { //游戏进程函数
 
                     case SDLK_LSHIFT:
                         isTurbo = true; // 当键被按下时，开启加速模式
+                        player -> turbo = true;
                         break;
 
 
@@ -200,6 +216,7 @@ void Background::gameplay() { //游戏进程函数
             if (event.type == SDL_KEYUP) {
                 if (event.key.keysym.sym == SDLK_LSHIFT) {
                     isTurbo = false; // 当键被释放时，关闭加速模式
+                    player -> turbo = false;
                 }
             }
 
@@ -291,7 +308,6 @@ void Background::render() { //设定渲染器的函数
             player -> render(playerX, playerY); //利用传入的数据刷新player的渲染器；在此处渲染是为了保证每次渲染屏幕时，player都会被渲染到
             controller->updatestage(minion,boss);
             controller->renderenemies(minion,boss,renderer,minion_width);
-            player->playerType = 2;
             bullet->render(renderer, playerX, playerY, player,magic_point); //常规子弹的渲染
             drop ->render(renderer);
             this->fontrender(width);
