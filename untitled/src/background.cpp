@@ -572,10 +572,10 @@ void Background::render() { //设定渲染器的函数
                             itMinion = minion->positions.erase(itMinion);
                             continue;
                         }
-                        if ((*itMinion)->position.x + minion->widths[(*itMinion)->type] >= (playerX + player->playerWidth/2) - bullet->width/2 &&
-                        (*itMinion)->position.x <= (playerX + player->playerWidth/2) + bullet->width/2 ) {
+                        if ((*itMinion)->position.x + minion->widths[(*itMinion)->type] >= (playerX + player->playerWidth/2) - bullet->width/2*(1+int(magic_point)) &&
+                        (*itMinion)->position.x <= (playerX + player->playerWidth/2) + bullet->width/2*(1+int(magic_point)) ) {
                             if (itMinion != minion->positions.end()) { //防止数组越界
-                                (*itMinion)->health = (*itMinion)->health - 0.1;
+                                (*itMinion)->health = (*itMinion)->health - 0.1*(0.5+0.5*int(magic_point));
                                 double k = (*itMinion)->position.w * ((*itMinion)->health)/((*itMinion)->max_health);
                                 (*itMinion)->health_bar.w = static_cast<int>(std::round(k));
                                 if ((*itMinion)->health <= 0){
@@ -618,10 +618,10 @@ void Background::render() { //设定渲染器的函数
                     }
                     for (auto bosses = boss->positions.begin(); bosses != boss->positions.end();) {
 
-                        if ((*bosses)->position[(*bosses)->state].x + boss->widths[(*bosses)->type][(*bosses)->state] >= (playerX + player->playerWidth/2) - bullet->width/2 &&
-                        (*bosses)->position[(*bosses)->state].x <= (playerX + player->playerWidth/2) + bullet->width/2 ) {
+                        if ((*bosses)->position[(*bosses)->state].x + boss->widths[(*bosses)->type][(*bosses)->state] >= (playerX + player->playerWidth/2) - bullet->width/2*(1+int(magic_point)) &&
+                        (*bosses)->position[(*bosses)->state].x <= (playerX + player->playerWidth/2) + bullet->width/2*(1+int(magic_point)) ) {
                             if (bosses != boss->positions.end()) { //防止数组越界
-                                (*bosses)->health = (*bosses)->health - 0.1;
+                                (*bosses)->health = (*bosses)->health - 0.1*(1+int(magic_point));
                                 double k = (minion_width-12) * ((*bosses)->health)/((*bosses)->max_health);
                                 (*bosses)->health_bar.w = static_cast<int>(std::round(k));
                                 if ((*bosses)->health <= 0){

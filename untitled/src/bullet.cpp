@@ -102,9 +102,24 @@ void Bullet::render(SDL_Renderer *renderer, int x, int y, Player *player,double 
     double piece=400/magic_point;
     if (player->playerType == 0) {
         if (stopTime - startTime >= piece) { //每个ms刷新一次子弹；渲染的时间可能大于ms，所以用大于号
-            SDL_Rect bulletRect = {x + (player->playerWidth/2)-width/2, y,width,height}; //x,y是自机的坐标
+            SDL_Rect bulletRect;
+            SDL_Rect bulletRect1;
+            SDL_Rect bulletRect2;
+
+            if (magic_point<3) {
+                bulletRect = {x + (player->playerWidth/2)-width/2, y,width,height};
+            }else {
+                bulletRect1 = {x + (player->playerWidth/4)-width/2, y,width,height};
+                bulletRect2 = {x + (player->playerWidth/4*3)-width/2, y,width,height};
+            }
+
             if (attack == true) {
-                bulletPosition.push_back(bulletRect);
+                if (magic_point<3) {
+                    bulletPosition.push_back(bulletRect);
+                }else {
+                    bulletPosition.push_back(bulletRect1);
+                    bulletPosition.push_back(bulletRect2);
+                }
             }
             startTime = stopTime; //刷新一次子弹后，startTime会被更新一次
         }
@@ -144,7 +159,7 @@ void Bullet::render(SDL_Renderer *renderer, int x, int y, Player *player,double 
     if (player->playerType == 2) {
         if (attack == true) {
             LightRender(renderer);
-            SDL_Rect skillRect = {x + (player->playerWidth/2)-width/2, 0,width,y};
+            SDL_Rect skillRect = {x + (player->playerWidth/2)-width/2*(1+int(magic_point)), 0,width*(1+int(magic_point)),y};
             SDL_RenderCopy(renderer, bulletTexture, NULL, &skillRect);
         }
     }
