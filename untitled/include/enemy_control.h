@@ -19,6 +19,6 @@ public:
 
     void minion_elimination(Enemy::enemy_info *enemyinfo);
 
-    void renderenemies(Enemy *minions, Boss *boss, SDL_Renderer *renderer, int wide);
+    void renderenemies(Enemy *minions, Boss *boss, SDL_Renderer *renderer, int wide,int height);
 };
 #endif //INC_3002_2_ENEMY_CONTROL_H
