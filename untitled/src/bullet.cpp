@@ -38,19 +38,37 @@ Bullet::~Bullet() {
 
 void Bullet::FireRender (SDL_Renderer *renderer, int fireCount) {
 
-    if (fireCount == 0) {
-        bulletSurface = IMG_LoadPNG_RW(SDL_RWFromFile("res/png/Fire0.png", "rb"));
-    } else if (fireCount == 1) {
-        bulletSurface = IMG_LoadPNG_RW(SDL_RWFromFile("res/png/Fire1.png", "rb"));
-    } else if (fireCount == 2) {
-        bulletSurface = IMG_LoadPNG_RW(SDL_RWFromFile("res/png/Fire2.png", "rb"));
-    } else if (fireCount == 3) {
-        bulletSurface = IMG_LoadPNG_RW(SDL_RWFromFile("res/png/Fire3.png", "rb"));
+
+    if (magic_point >= 0 && magic_point <= 2) {
+        if (fireCount == 0) {
+            bulletSurface = IMG_LoadPNG_RW(SDL_RWFromFile("res/png/Fire/Fire0.png", "rb"));
+        } else if (fireCount == 1) {
+            bulletSurface = IMG_LoadPNG_RW(SDL_RWFromFile("res/png/Fire/Fire1.png", "rb"));
+        } else if (fireCount == 2) {
+            bulletSurface = IMG_LoadPNG_RW(SDL_RWFromFile("res/png/Fire/Fire2.png", "rb"));
+        } else if (fireCount == 3) {
+            bulletSurface = IMG_LoadPNG_RW(SDL_RWFromFile("res/png/Fire/Fire3.png", "rb"));
+        }
+        if (!bulletSurface) {
+            fprintf(myLog, "SDL_Bullet_Surface Error: %s\n", IMG_GetError());
+            exit(-5);
+        }
+    } else {
+        if (fireCount == 0) {
+            bulletSurface = IMG_LoadPNG_RW(SDL_RWFromFile("res/png/Fire/Fire4.png", "rb"));
+        } else if (fireCount == 1) {
+            bulletSurface = IMG_LoadPNG_RW(SDL_RWFromFile("res/png/Fire/Fire5.png", "rb"));
+        } else if (fireCount == 2) {
+            bulletSurface = IMG_LoadPNG_RW(SDL_RWFromFile("res/png/Fire/Fire6.png", "rb"));
+        } else if (fireCount == 3) {
+            bulletSurface = IMG_LoadPNG_RW(SDL_RWFromFile("res/png/Fire/Fire7.png", "rb"));
+        }
+        if (!bulletSurface) {
+            fprintf(myLog, "SDL_Bullet_Surface Error: %s\n", IMG_GetError());
+            exit(-5);
+        }
     }
-    if (!bulletSurface) {
-        fprintf(myLog, "SDL_Bullet_Surface Error: %s\n", IMG_GetError());
-        exit(-5);
-    }
+
 
 
     width = bulletSurface->w;
@@ -111,6 +129,13 @@ void Bullet::render(SDL_Renderer *renderer, int x, int y, Player *player,double 
             startTime = stopTime;
         }
         if (attack == true) {
+            if (magic_point >= 0 && magic_point <= 1) {
+                firePoint = 1;
+            } else if (magic_point >= 1 && magic_point <= 2) {
+                firePoint = 2;
+            } else if (magic_point >= 2 && magic_point <= 4) {
+                firePoint = 3;
+            }
             FireRender(renderer, fireCount);
             SDL_Rect bulletRect = {x + (player->playerWidth/2) - width*firePoint/2, y - height*firePoint,width*firePoint,height*firePoint};
             SDL_RenderCopy(renderer, bulletTexture, NULL, &bulletRect);

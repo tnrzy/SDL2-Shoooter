@@ -172,7 +172,7 @@ void Background::gameplay() { //游戏进程函数
     while (true) {
         begin = SDL_GetTicks();
         render(); //绘制图像
-        int speed = 5;
+        int speed = 8;
 
         while (SDL_PollEvent(&event)) { //因为要修改event所以pass by ref; 用while是为了在一轮内把事件都处理完
             if (event.type == SDL_MOUSEBUTTONDOWN) {
@@ -485,7 +485,11 @@ void Background::render() { //设定渲染器的函数
                         (*itMinion)->position.y <= playerY &&
                         (*itMinion)->position.y + minion->heights[(*itMinion)->type] >= playerY - bullet->height*(bullet->firePoint)) {
                             if (itMinion != minion->positions.end()) { //防止数组越界
-                                (*itMinion)->health = (*itMinion)->health - 0.1;
+                                if (magic_point >= 0 && magic_point <=2) {
+                                    (*itMinion)->health = (*itMinion)->health - 0.02;
+                                } else {
+                                    (*itMinion)->health = (*itMinion)->health - 0.5;
+                                }
                                 double k = (*itMinion)->position.w * ((*itMinion)->health)/((*itMinion)->max_health);
                                 (*itMinion)->health_bar.w = static_cast<int>(std::round(k));
                                 if ((*itMinion)->health <= 0){
@@ -536,7 +540,11 @@ void Background::render() { //设定渲染器的函数
                         (*bosses)->position.y <= playerY &&
                         (*bosses)->position.y + boss->heights[(*bosses)->type] >= playerY - bullet->height*(bullet->firePoint)) {
                             if (bosses != boss->positions.end()) { //防止数组越界
-                                (*bosses)->health = (*bosses)->health - 0.1;
+                                if (magic_point >= 0 && magic_point <=2) {
+                                    (*bosses)->health = (*bosses)->health - 0.02;
+                                } else {
+                                    (*bosses)->health = (*bosses)->health - 0.5;
+                                }
                                 double k = (minion_width-12) * ((*bosses)->health)/((*bosses)->max_health);
                                 (*bosses)->health_bar.w = static_cast<int>(std::round(k));
                                 if ((*bosses)->health <= 0){
@@ -660,7 +668,7 @@ void Background::render() { //设定渲染器的函数
             }
             break;
     }
-
+    bullet->magic_point = magic_point;
     SDL_RenderPresent(renderer); //此处会present一次
 }
 void Background::fontrender(int width) {

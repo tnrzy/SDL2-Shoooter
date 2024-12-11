@@ -24,6 +24,7 @@ public:
 
     bool attack; //用于表示是否在发射子弹
     int firePoint;
+    double magic_point;
 
 protected: //可以设计子类访问
     SDL_Surface *bulletSurface;
