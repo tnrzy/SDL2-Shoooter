@@ -485,10 +485,10 @@ void Background::render() { //设定渲染器的函数
                         (*itMinion)->position.y <= playerY &&
                         (*itMinion)->position.y + minion->heights[(*itMinion)->type] >= playerY - bullet->height*(bullet->firePoint)) {
                             if (itMinion != minion->positions.end()) { //防止数组越界
-                                if (magic_point >= 0 && magic_point <=2) {
+                                if (magic_point >= 0 && magic_point <=3) {
                                     (*itMinion)->health = (*itMinion)->health - 0.02;
                                 } else {
-                                    (*itMinion)->health = (*itMinion)->health - 0.5;
+                                    (*itMinion)->health = (*itMinion)->health - 0.05;
                                 }
                                 double k = (*itMinion)->position.w * ((*itMinion)->health)/((*itMinion)->max_health);
                                 (*itMinion)->health_bar.w = static_cast<int>(std::round(k));
@@ -540,10 +540,10 @@ void Background::render() { //设定渲染器的函数
                         (*bosses)->position.y <= playerY &&
                         (*bosses)->position.y + boss->heights[(*bosses)->type] >= playerY - bullet->height*(bullet->firePoint)) {
                             if (bosses != boss->positions.end()) { //防止数组越界
-                                if (magic_point >= 0 && magic_point <=2) {
+                                if (magic_point >= 0 && magic_point <=3) {
                                     (*bosses)->health = (*bosses)->health - 0.02;
                                 } else {
-                                    (*bosses)->health = (*bosses)->health - 0.5;
+                                    (*bosses)->health = (*bosses)->health - 0.05;
                                 }
                                 double k = (minion_width-12) * ((*bosses)->health)/((*bosses)->max_health);
                                 (*bosses)->health_bar.w = static_cast<int>(std::round(k));

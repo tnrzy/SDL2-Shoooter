@@ -1,7 +1,7 @@
 #include "../include/common.h"
 #include "../include/bullet.h"
 
-Bullet::Bullet(SDL_Renderer *renderer) : bulletSurface(nullptr), bulletTexture(nullptr), attack(false), firePoint(2){
+Bullet::Bullet(SDL_Renderer *renderer) : bulletSurface(nullptr), bulletTexture(nullptr), attack(false), firePoint(1){
     myLog = fopen("Bullet.log", "w");
     if (!myLog) {
         exit(-1);
@@ -39,7 +39,7 @@ Bullet::~Bullet() {
 void Bullet::FireRender (SDL_Renderer *renderer, int fireCount) {
 
 
-    if (magic_point >= 0 && magic_point <= 2) {
+    if (magic_point >= 0 && magic_point <= 3) {
         if (fireCount == 0) {
             bulletSurface = IMG_LoadPNG_RW(SDL_RWFromFile("res/png/Fire/Fire0.png", "rb"));
         } else if (fireCount == 1) {
@@ -129,12 +129,12 @@ void Bullet::render(SDL_Renderer *renderer, int x, int y, Player *player,double 
             startTime = stopTime;
         }
         if (attack == true) {
-            if (magic_point >= 0 && magic_point <= 1) {
+            if (magic_point >= 1 && magic_point <= 2) {
                 firePoint = 1;
-            } else if (magic_point >= 1 && magic_point <= 2) {
+            } else if (magic_point >= 2 && magic_point <= 3) {
                 firePoint = 2;
-            } else if (magic_point >= 2 && magic_point <= 4) {
-                firePoint = 3;
+            } else if (magic_point >= 3 && magic_point <= 4) {
+                firePoint = 2;
             }
             FireRender(renderer, fireCount);
             SDL_Rect bulletRect = {x + (player->playerWidth/2) - width*firePoint/2, y - height*firePoint,width*firePoint,height*firePoint};
