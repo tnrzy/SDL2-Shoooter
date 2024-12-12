@@ -8,6 +8,7 @@ minion_bullet::minion_bullet(SDL_Renderer *renderer){
     if (!myLog) {
     exit(-1);
     }
+    positions.reserve(200);
     mbullet.reserve(4);
     for (int i = 0; i < 4; i++) {
         std::string path = "res/png/enemy_bullet/minion_bullet" + std::to_string(i) + ".png";
@@ -22,7 +23,16 @@ minion_bullet::minion_bullet(SDL_Renderer *renderer){
     }
 
 };
-
+minion_bullet::~minion_bullet(){
+    if (!mbullet.empty()){
+        for (int i = 0; i < 4;i++){
+            SDL_DestroyTexture(mbullet[i]);
+        }
+    }
+    if (!positions.empty()) {
+        positions.clear();
+    }
+}
 void minion_bullet::add_minion_bullet(int type,Enemy::enemy_info enemy) {
     int x_core = enemy.position.x + enemy.position.w/2;
     int y_core = enemy.position.y + enemy.position.h/2;

@@ -762,6 +762,21 @@ void Background::render() { //设定渲染器的函数
                 mbullets->add_minion_bullet(addbullets->type, (*addbullets));
             }
             mbullets->minion_bullet_render(renderer,minion_width,window_height);
+            for (auto itmbul = mbullets->positions.begin(); itmbul != mbullets->positions.end();){
+                if ((*itmbul)->rect.y + (*itmbul) -> rect.h >= playerY + player->playerHeight/2 &&
+                        (*itmbul) -> rect.y <= playerY + player->playerHeight/2 &&
+                        (*itmbul) -> rect.x + (*itmbul) ->rect.w >=playerX + player->playerWidth/2 &&
+                        (*itmbul) -> rect.x <= playerX + player->playerWidth/2 ){
+                    state = END;
+                    playerX = minion_width / 2;
+                    playerY = window_height / 2;
+                }
+                else{
+                    if (itmbul != mbullets->positions.end()){
+                        ++itmbul;
+                    }
+                }
+            }
             explosions->render_explosion(renderer);
             if (minion->check_collision(playerX,playerY,player->playerWidth,player->playerHeight)||boss->check_collision(playerX,playerY,player->playerWidth,player->playerHeight)){
                 state = END;

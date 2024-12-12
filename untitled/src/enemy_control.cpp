@@ -26,7 +26,7 @@ void enemy_controller::minion_elimination(Enemy::enemy_info *enemyinfo){
     counter +=enemyinfo->type;
 }
 void enemy_controller::updatestage(Enemy* minions,Boss* boss) { //阶段检测与切换
-    if (state == 0 && counter >= 10){
+    if (state == 0 && counter >= 50){
         state = 1; //在一阶段中击杀积分大于五十 转入过渡阶段
     }
     if (state == 1){
