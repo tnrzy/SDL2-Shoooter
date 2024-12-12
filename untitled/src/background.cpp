@@ -538,6 +538,7 @@ void Background::render() { //设定渲染器的函数
                                 if ((*bosses)->health <= 0){
                                     beated_enemy+=1;
                                     boss->skill(-1);
+                                    boss->t=true;
                                     score+=(*bosses)->score;
                                     drop ->add_drop((*bosses)->position[(*bosses)->state],(*bosses)->drop_num);
                                     if ((*bosses)->type==0&&(*bosses)->mode==3) explosions ->add_explosion((*bosses)->position[(*bosses)->state],(*bosses)->type+100);
@@ -645,6 +646,7 @@ void Background::render() { //设定渲染器的函数
                                 if ((*bosses)->health <= 0){
                                     beated_enemy+=1;
                                     boss->skill(-1);
+                                    boss->t=true;
                                     score+=(*bosses)->score;
                                     drop ->add_drop((*bosses)->position[(*bosses)->state],(*bosses)->drop_num);
                                     if ((*bosses)->type==0&&(*bosses)->mode==3) explosions ->add_explosion((*bosses)->position[(*bosses)->state],(*bosses)->type+100);
@@ -744,6 +746,7 @@ void Background::render() { //设定渲染器的函数
                                 if ((*bosses)->health <= 0){
                                     beated_enemy+=1;
                                     boss->skill(-1);
+                                    boss->t=true;
                                     score+=(*bosses)->score;
                                     drop ->add_drop((*bosses)->position[(*bosses)->state],(*bosses)->drop_num);
                                 //controller->minion_elimination((*bosses));

@@ -41,7 +41,7 @@ void enemy_controller::updatestage(Enemy* minions,Boss* boss) { //阶段检测�
             counter = 0;
             generated=false;
         }
-        generated=true;
+        else generated=true;
     }
     // boss死后转回一阶段；
 }
