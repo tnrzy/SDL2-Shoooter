@@ -365,6 +365,7 @@ void Background::render() { //设定渲染器的函数
                     }
                     for (auto itBullet = bullet->bulletPosition.begin(); itBullet != bullet->bulletPosition.end();) {
                         //对子弹的检测
+
                         if (itBullet->x + bullet->width>= (*itMinion)->position.x
                             && itBullet->x <= ((*itMinion)->position.x + minion->widths[(*itMinion)->type])
                             && itBullet->y + bullet->height >= (*itMinion)->position.y
@@ -419,14 +420,17 @@ void Background::render() { //设定渲染器的函数
                                 ++itBullet;
                             }
                         }
+
                     }
                     if (itMinion != minion->positions.end()) {
                         ++itMinion;
                     }
+
                 }
                 for (auto bosses = boss->positions.begin(); bosses != boss->positions.end();) {
                     for (auto itBullet = bullet->bulletPosition.begin(); itBullet != bullet->bulletPosition.end();) {
                         //对子弹的检测
+
                         if (itBullet->x + bullet->width>= (*bosses)->position[(*bosses)->state].x
                             && itBullet->x <= ((*bosses)->position[(*bosses)->state].x + boss->widths[(*bosses)->type][(*bosses)->state])
                             && itBullet->y + bullet->height >= (*bosses)->position[(*bosses)->state].y
@@ -438,7 +442,7 @@ void Background::render() { //设定渲染器的函数
                                 bullet->bulletPosition.pop_back();
                             }
                             if (bosses != boss->positions.end()) { //防止数组越界
-                                (*bosses)->health = (*bosses)->health - 1;
+                                (*bosses)->health = (*bosses)->health - 4;
                                 double k = (minion_width-12) * ((*bosses)->health)/((*bosses)->max_health);
                                 (*bosses)->health_bar.w = static_cast<int>(std::round(k));
                                 if ((*bosses)->health <= 0){
@@ -572,10 +576,17 @@ void Background::render() { //设定渲染器的函数
                             itMinion = minion->positions.erase(itMinion);
                             continue;
                         }
-                        if ((*itMinion)->position.x + minion->widths[(*itMinion)->type] >= (playerX + player->playerWidth/2) - bullet->width/2*(1+int(magic_point)) &&
-                        (*itMinion)->position.x <= (playerX + player->playerWidth/2) + bullet->width/2*(1+int(magic_point)) ) {
+                        bool po=(*itMinion)->position.x + minion->widths[(*itMinion)->type] >= (playerX ) - bullet->width/16*(7+int(magic_point)) &&
+                        (*itMinion)->position.x <= (playerX ) + bullet->width/16*(7+int(magic_point) );
+                        bool pl=(*itMinion)->position.x + minion->widths[(*itMinion)->type] >= (playerX + player->playerWidth) - bullet->width/16*(7+int(magic_point)) &&
+                        (*itMinion)->position.x <= (playerX + player->playerWidth) + bullet->width/16*(7+int(magic_point) );
+                        if ((magic_point<3 && (*itMinion)->position.x + minion->widths[(*itMinion)->type] >= (playerX + player->playerWidth/2) - bullet->width/16*(7+int(magic_point)) &&
+                        (*itMinion)->position.x <= (playerX + player->playerWidth/2) + bullet->width/16*(7+int(magic_point) ))||(magic_point>=3 && (pl || po))) {
                             if (itMinion != minion->positions.end()) { //防止数组越界
                                 (*itMinion)->health = (*itMinion)->health - 0.1*(0.5+0.5*int(magic_point));
+                                if (magic_point >= 3 && (pl && po)) {
+                                    (*itMinion)->health = (*itMinion)->health - 0.1*(0.5+0.5*int(magic_point));
+                                }
                                 double k = (*itMinion)->position.w * ((*itMinion)->health)/((*itMinion)->max_health);
                                 (*itMinion)->health_bar.w = static_cast<int>(std::round(k));
                                 if ((*itMinion)->health <= 0){
@@ -617,11 +628,17 @@ void Background::render() { //设定渲染器的函数
                         }
                     }
                     for (auto bosses = boss->positions.begin(); bosses != boss->positions.end();) {
-
+                        bool po1=(*bosses)->position[(*bosses)->state].x + boss->widths[(*bosses)->type][(*bosses)->state] >= (playerX ) - bullet->width/16*(7+int(magic_point)) &&
+                        (*bosses)->position[(*bosses)->state].x <= (playerX ) + bullet->width/16*(7+int(magic_point) );
+                        bool pl1=(*bosses)->position[(*bosses)->state].x + boss->widths[(*bosses)->type][(*bosses)->state]>= (playerX + player->playerWidth) - bullet->width/16*(7+int(magic_point)) &&
+                        (*bosses)->position[(*bosses)->state].x <= (playerX + player->playerWidth) + bullet->width/16*(7+int(magic_point) );
                         if ((*bosses)->position[(*bosses)->state].x + boss->widths[(*bosses)->type][(*bosses)->state] >= (playerX + player->playerWidth/2) - bullet->width/2*(1+int(magic_point)) &&
-                        (*bosses)->position[(*bosses)->state].x <= (playerX + player->playerWidth/2) + bullet->width/2*(1+int(magic_point)) ) {
+                        (*bosses)->position[(*bosses)->state].x <= (playerX + player->playerWidth/2) + bullet->width/2*(1+int(magic_point)) ||(magic_point>=3 && (pl1 || po1))) {
                             if (bosses != boss->positions.end()) { //防止数组越界
                                 (*bosses)->health = (*bosses)->health - 0.1*(1+int(magic_point));
+                                if (magic_point >= 3 && (pl1 && po1)) {
+                                    (*bosses)->health = (*bosses)->health - 0.1*(1+int(magic_point));
+                                }
                                 double k = (minion_width-12) * ((*bosses)->health)/((*bosses)->max_health);
                                 (*bosses)->health_bar.w = static_cast<int>(std::round(k));
                                 if ((*bosses)->health <= 0){

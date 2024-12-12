@@ -99,32 +99,29 @@ void Bullet::LightRender (SDL_Renderer *renderer) {
 void Bullet::render(SDL_Renderer *renderer, int x, int y, Player *player,double magic_point) { //需要获取窗口的宽度；需要随机刷新敌机
     uint32_t stopTime = SDL_GetTicks(); //stopTime随着call该render函数，每次都在更新
     static int fireCount = 0;
-    double piece=400/magic_point;
+    double piece=500/(0.5+0.5*int(magic_point));
     if (player->playerType == 0) {
         if (stopTime - startTime >= piece) { //每个ms刷新一次子弹；渲染的时间可能大于ms，所以用大于号
             SDL_Rect bulletRect;
             SDL_Rect bulletRect1;
             SDL_Rect bulletRect2;
 
-            if (magic_point<3) {
-                bulletRect = {x + (player->playerWidth/2)-width/2, y,width,height};
-            }else {
-                bulletRect1 = {x + (player->playerWidth/4)-width/2, y,width,height};
-                bulletRect2 = {x + (player->playerWidth/4*3)-width/2, y,width,height};
-            }
+
+
+
+
+            bulletRect = {x + (player->playerWidth/2)-width/2, y,width,height};
+
 
             if (attack == true) {
-                if (magic_point<3) {
-                    bulletPosition.push_back(bulletRect);
-                }else {
-                    bulletPosition.push_back(bulletRect1);
-                    bulletPosition.push_back(bulletRect2);
-                }
+
+                bulletPosition.push_back(bulletRect);
+
             }
             startTime = stopTime; //刷新一次子弹后，startTime会被更新一次
         }
         if (!bulletPosition.empty()) { //读取并生成子弹
-            int dy = 5*magic_point; //子弹的速度
+            int dy = 5*(0.5+0.5*int(magic_point)); //子弹的速度
             for (int i = 0; i < bulletPosition.size(); i++) {
                 bulletPosition[i].y -= dy;
                 if (bulletPosition[i].y < 0) {
@@ -159,8 +156,16 @@ void Bullet::render(SDL_Renderer *renderer, int x, int y, Player *player,double 
     if (player->playerType == 2) {
         if (attack == true) {
             LightRender(renderer);
-            SDL_Rect skillRect = {x + (player->playerWidth/2)-width/2*(1+int(magic_point)), 0,width*(1+int(magic_point)),y};
-            SDL_RenderCopy(renderer, bulletTexture, NULL, &skillRect);
+            if (magic_point<3) {
+                SDL_Rect skillRect = {x + (player->playerWidth/2)-width/16*(7+int(magic_point)), 0,width/8*(7+int(magic_point)),y};
+                SDL_RenderCopy(renderer, bulletTexture, NULL, &skillRect);
+            }else {
+                SDL_Rect skillRect1 = {x -width/16*(7+int(magic_point)), 0,width/8*(7+int(magic_point)),y};
+                SDL_RenderCopy(renderer, bulletTexture, NULL, &skillRect1);
+                SDL_Rect skillRect2 = {x + (player->playerWidth)-width/16*(7+int(magic_point)), 0,width/8*(7+int(magic_point)),y};
+                SDL_RenderCopy(renderer, bulletTexture, NULL, &skillRect2);
+            }
+
         }
     }
 }
