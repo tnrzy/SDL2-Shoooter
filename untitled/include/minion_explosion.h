@@ -13,6 +13,7 @@ public:
         int y;
         int timer;
         int type;
+        uint32_t startTime;
         SDL_Rect rect;
         int pivot;
         bool done;
@@ -20,6 +21,7 @@ public:
             this -> x = x;
             this -> y = y;
             this -> timer = 0;
+            this -> startTime= SDL_GetTicks();
             this -> pivot = 0;
             this -> type = type;
             this -> done = false;
@@ -35,6 +37,10 @@ public:
                 auto exp = SDL_Rect(x,y,280,280);
                 this->rect = exp;
             }
+            if (type == 100){
+                auto exp = SDL_Rect(x,y,300,300);
+                this->rect = exp;
+            }
 
 
         }
@@ -47,6 +53,7 @@ protected:
     std::vector<SDL_Texture *> explosion0;
     std::vector<SDL_Texture *> explosion1;
     std::vector<SDL_Texture *> explosion2;
+    std::vector<SDL_Texture *> explosion100;
     FILE *myLog;
     bool done;
 

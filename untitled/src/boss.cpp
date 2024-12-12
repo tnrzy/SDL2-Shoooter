@@ -80,32 +80,32 @@ void Boss::render(SDL_Renderer *renderer, int wide,int height) { //需要获取�
             generator.seed((unsigned)time(nullptr) + generator());
             switch (positions[i]->type) {
                 case 0:
-                    if (positions[i]->stage==0) {
+                    if (positions[i]->mode==0) {
                         positions[i] -> health=positions[i]->max_health;
                         positions[i] -> health_bar.w=wide-8;
                         int d_x=distribution(generator),d_y=distribution(generator);
                         positions[i]->position[0].x+=d_x;
                         positions[i]->position[0].y+=d_y;
                         if (stopTime-startTime>=2000) {
-                            positions[i]->stage=1;
+                            positions[i]->mode=1;
                             positions[i]->position[0].x=wide/2-widths[0][0]/2;
                             positions[i]->position[0].y=200;
                             collision=true;
                             startTime=stopTime;
                         }
                     }
-                    else if (positions[i]->stage==1) {
+                    else if (positions[i]->mode==1) {
                         positions[i] -> health=positions[i]->max_health;
                         positions[i] -> health_bar.w=wide-8;
                         if (stopTime-startTime>=2000) {
-                            positions[i]->stage=2;
+                            positions[i]->mode=2;
                             positions[i]->state=1;
                             dx=0;
                             startTime=stopTime;
                             moveTime=stopTime;
                         }
                     }
-                    else if (positions[i]->stage==2) {
+                    else if (positions[i]->mode==2) {
                         if (stopTime-startTime>=150) {
                             positions[i] -> state++;
                             if (positions[i]->state>10) {
@@ -117,7 +117,7 @@ void Boss::render(SDL_Renderer *renderer, int wide,int height) { //需要获取�
                                     timer=0;
                                     positions[i]->position[11].x=positions[i]->position[1].x+widths[0][1]/2-widths[0][11]/2;
                                     positions[i]->position[11].y=125;
-                                    positions[i]->stage=3;
+                                    positions[i]->mode=3;
                                     positions[i]->state=11;
                                     dx=dy=0;
                                     startTime=stopTime;
@@ -127,7 +127,7 @@ void Boss::render(SDL_Renderer *renderer, int wide,int height) { //需要获取�
                             else if (positions[i]->state>1){
                                 positions[i]->position[positions[i]->state]=positions[i]->position[positions[i]->state-1];
                             }
-                            //if (positions[i] -> state>=positions[i] -> sum[positions[i] ->stage]) positions[i] -> state=positions[i] -> sum[positions[i] ->stage]-positions[i] -> stage_pic[positions[i] ->stage];
+                            //if (positions[i] -> state>=positions[i] -> sum[positions[i] ->mode]) positions[i] -> state=positions[i] -> sum[positions[i] ->mode]-positions[i] -> mode_pic[positions[i] ->mode];
                             startTime=stopTime;
                         }
                         if (stopTime-moveTime>=1000) {
@@ -148,13 +148,18 @@ void Boss::render(SDL_Renderer *renderer, int wide,int height) { //需要获取�
                             if (positions[i]->position[positions[i]->state].y+heights[0][positions[i]->state]>=height-300) dy=-abs(dy);
                             moveTime=stopTime;
                         }
+
                         positions[i]->position[positions[i]->state].x+=dx;
                         positions[i]->position[positions[i]->state].y+=dy;
-                        positions[i]->health+=0.09;
+                        if (skill_type==0) {
+                            positions[i]->health+=0.001;
+                        }
+                        else positions[i]->health+=0.09;
                         double k = (wide-12) * (positions[i]->health)/(positions[i]->max_health);
                         positions[i]->health_bar.w = static_cast<int>(std::round(k));
+
                         if (stopTime-startTime>=10000) {
-                            positions[i]->stage=2;
+                            positions[i]->mode=2;
                             positions[i]->state=1;
                             startTime=stopTime;
                             moveTime=stopTime;
@@ -191,6 +196,9 @@ bool Boss::check_collision(int playerX, int playerY,int player_width, int player
         }
     }
     return false;
+}
+void Boss::skill(int type) {
+    skill_type=type;
 }
 void Boss::start() {
     startTime = SDL_GetTicks(); //返回自初始化经过的毫秒数

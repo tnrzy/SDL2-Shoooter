@@ -19,25 +19,25 @@ public:
                 this->score = 10;
                 this->health = 100;
                 this ->max_health = 100;
-                this->max_stage=4;
+                // this->max_mode=4;
                 this ->health_bar = health_bar;
                 this ->health_bar_back = health_bar_back;
                 this ->drop_num = 30;
-                this ->stage_pic={1,0,10,1};
-                sum.push_back(1);
+                // this ->mode_pic={1,0,10,1};
+                // sum.push_back(1);
                 this->max_pic=12;
                 for (int i=0;i<max_pic;i++) this->position.push_back(minionrect[i]);
             }
-            for (int i = 1; i < max_stage; i++) sum.push_back(sum[i-1]+stage_pic[i]);
+            // for (int i = 1; i < max_mode; i++) sum.push_back(sum[i-1]+mode_pic[i]);
         }
 
         std::vector<SDL_Rect> position;
         int state=0;
-        int stage=0;
-        int max_stage=0;
+        int mode=0;
+        // int max_mode=0;
         int type;
-        std::vector<int> stage_pic;
-        std::vector<int> sum;
+        // std::vector<int> mode_pic;
+        // std::vector<int> sum;
         int max_pic;
         int score;
         double health;
@@ -61,6 +61,7 @@ public:
     std::vector<int> widths[type_num];
     std::vector<int> heights[type_num];
 
+    void skill(int type);
     bool check_collision(int playerX, int playerY, int player_width, int player_height);
 
 protected: //可以设计子类访问
@@ -78,6 +79,7 @@ protected: //可以设计子类访问
     int timer=0;
     int dx=0;
     int dy=0;
+    int skill_type=-1;
     bool collision=false;
 };
 #endif //INC_3002_2_BOSS_H

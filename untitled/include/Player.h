@@ -17,7 +17,7 @@ public:
 
     int playerWidth; //自机图片的宽和高, 并且要让敌机知道否则无法判断；是以左上角为原点计算
     int playerHeight;
-    int playerType; //说明这是哪种飞机
+    int playerType=2; //说明这是哪种飞机
 
     int turboWidth;
     int turboHeight;

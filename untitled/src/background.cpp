@@ -399,14 +399,15 @@ void Background::render() { //设定渲染器的函数
 
             controller->updatestage(minion,boss);
             controller->renderenemies(minion,boss,renderer,minion_width,window_height);
-            player -> render(playerX, playerY); //利用传入的数据刷新player的渲染器；在此处渲染是为了保证每次渲染屏幕时，player都会被渲染到
             bullet->render(renderer, playerX, playerY, player,magic_point); //常规子弹的渲染
+            player -> render(playerX, playerY); //利用传入的数据刷新player的渲染器；在此处渲染是为了保证每次渲染屏幕时，player都会被渲染到
             drop ->render(renderer);
             this->fontrender(minion_width);
             int skill_type = 0;
             if (skill_state == 1) {
                 skill_state = 0;
                 magic_point -=1;
+                if (!boss->positions.empty()) boss->skill(skill_type);
                 skillrender(skill_type);
                 if (skill_type == 0) {
                     for (auto itMinion = minion->positions.begin(); itMinion != minion->positions.end();) {
@@ -536,10 +537,15 @@ void Background::render() { //设定渲染器的函数
                                 (*bosses)->health_bar.w = static_cast<int>(std::round(k));
                                 if ((*bosses)->health <= 0){
                                     beated_enemy+=1;
-
+                                    boss->skill(-1);
                                     score+=(*bosses)->score;
                                     drop ->add_drop((*bosses)->position[(*bosses)->state],(*bosses)->drop_num);
-                                    //explosions ->add_explosion((*bosses)->position[(*bosses)->state],(*bosses)->type);
+                                    if ((*bosses)->type==0&&(*bosses)->mode==3) explosions ->add_explosion((*bosses)->position[(*bosses)->state],(*bosses)->type+100);
+                                    else {
+                                        (*bosses)->position[(*bosses)->state].x=(*bosses)->position[(*bosses)->state].x+boss->widths[0][(*bosses)->state]/2-boss->widths[0][11]/2;
+                                        (*bosses)->position[(*bosses)->state].y=125;
+                                        explosions ->add_explosion((*bosses)->position[(*bosses)->state],(*bosses)->type+100);
+                                    }
                                     //controller->boss_elimination((*bosses));
                                     bosses = boss->positions.erase(bosses);
                                 }
@@ -638,10 +644,15 @@ void Background::render() { //设定渲染器的函数
                                 (*bosses)->health_bar.w = static_cast<int>(std::round(k));
                                 if ((*bosses)->health <= 0){
                                     beated_enemy+=1;
-
+                                    boss->skill(-1);
                                     score+=(*bosses)->score;
                                     drop ->add_drop((*bosses)->position[(*bosses)->state],(*bosses)->drop_num);
-                                    //explosions ->add_explosion((*bosses)->position[(*bosses)->state],(*bosses)->type);
+                                    if ((*bosses)->type==0&&(*bosses)->mode==3) explosions ->add_explosion((*bosses)->position[(*bosses)->state],(*bosses)->type+100);
+                                    else {
+                                        (*bosses)->position[(*bosses)->state].x=(*bosses)->position[(*bosses)->state].x+boss->widths[0][(*bosses)->state]/2-boss->widths[0][11]/2;
+                                        (*bosses)->position[(*bosses)->state].y=125;
+                                        explosions ->add_explosion((*bosses)->position[(*bosses)->state],(*bosses)->type+100);
+                                    }
                                     //controller->boss_elimination((*bosses));
                                     bosses = boss->positions.erase(bosses);
                                 }
@@ -732,10 +743,16 @@ void Background::render() { //设定渲染器的函数
                                 (*bosses)->health_bar.w = static_cast<int>(std::round(k));
                                 if ((*bosses)->health <= 0){
                                     beated_enemy+=1;
+                                    boss->skill(-1);
                                     score+=(*bosses)->score;
                                     drop ->add_drop((*bosses)->position[(*bosses)->state],(*bosses)->drop_num);
                                 //controller->minion_elimination((*bosses));
-                                //explosions ->add_explosion((*bosses)->position[(*bosses)->state],(*bosses)->type);
+                                    if ((*bosses)->type==0&&(*bosses)->mode==3) explosions ->add_explosion((*bosses)->position[(*bosses)->state],(*bosses)->type+100);
+                                    else {
+                                        (*bosses)->position[(*bosses)->state].x=(*bosses)->position[(*bosses)->state].x+boss->widths[0][(*bosses)->state]/2-boss->widths[0][11]/2;
+                                        (*bosses)->position[(*bosses)->state].y=125;
+                                        explosions ->add_explosion((*bosses)->position[(*bosses)->state],(*bosses)->type+100);
+                                    }
                                     bosses = boss->positions.erase(bosses);
                                 }
                             } else {
