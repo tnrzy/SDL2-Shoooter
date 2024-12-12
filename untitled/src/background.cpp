@@ -22,7 +22,7 @@ using namespace std;
 
 
 Background::Background() : myLog(nullptr), state(START), window(nullptr), imageAccess(nullptr),
-renderer(nullptr), backgroundSurface(nullptr), backgroundTexture(nullptr) { //构造函数;立即初始化右边变量
+renderer(nullptr), backgroundSurface(nullptr), backgroundTexture(nullptr), menu_0(false), menu_1(false), menu_2(false){ //构造函数;立即初始化右边变量
     window = nullptr;
     renderer = nullptr;
 
@@ -57,6 +57,7 @@ Background::~Background() { //销毁函数
     if (renderer) {
         SDL_DestroyRenderer(renderer);
     }
+
     if (window) {
         SDL_DestroyWindow(window);
     }
@@ -116,6 +117,74 @@ void Background::loadPNG(char *file) {
     backgroundTexture = SDL_CreateTextureFromSurface(renderer, backgroundSurface);
     SDL_FreeSurface(backgroundSurface);
     backgroundSurface = nullptr;
+}
+
+void Background::menuRender() {
+    if (menu_1) {
+        menuSurface_1 = IMG_LoadJPG_RW(SDL_RWFromFile("res/png/Menu/red1.jpg", "rb")); //让Surface打开一张图片
+        if (menuSurface_1  == nullptr) {
+            exit(-1);
+        }
+    } else {
+        menuSurface_1 = IMG_LoadJPG_RW(SDL_RWFromFile("res/png/Menu/black1.jpg", "rb")); //让Surface打开一张图片
+        if (menuSurface_1  == nullptr) {
+            exit(-1);
+        }
+    }
+    menuWidth_1 = menuSurface_1->w;
+    menuHeight_1 = menuSurface_1->h;
+
+    menuTexture_1 = SDL_CreateTextureFromSurface(renderer, menuSurface_1); //把Surface拷贝到Texture
+    SDL_FreeSurface(menuSurface_1);
+    menuSurface_1 = nullptr;
+
+    SDL_Rect menuRect_1 = {(minion_width-menuWidth_1)/2, 4*window_height/6, menuWidth_1, menuHeight_1};
+    SDL_RenderCopy(renderer, menuTexture_1, nullptr, &menuRect_1);
+    SDL_DestroyTexture(menuTexture_1);
+
+    if (menu_2) {
+        menuSurface_2 = IMG_LoadJPG_RW(SDL_RWFromFile("res/png/Menu/red2.jpg", "rb")); //让Surface打开一张图片
+        if (menuSurface_2  == nullptr) {
+            exit(-1);
+        }
+    } else {
+        menuSurface_2 = IMG_LoadJPG_RW(SDL_RWFromFile("res/png/Menu/black2.jpg", "rb")); //让Surface打开一张图片
+        if (menuSurface_2  == nullptr) {
+            exit(-1);
+        }
+    }
+    menuWidth_2 = menuSurface_2->w;
+    menuHeight_2 = menuSurface_2->h;
+
+    menuTexture_2 = SDL_CreateTextureFromSurface(renderer, menuSurface_2); //把Surface拷贝到Texture
+    SDL_FreeSurface(menuSurface_2);
+    menuSurface_2 = nullptr;
+
+    SDL_Rect menuRect_2 = {(minion_width-menuWidth_1)/2, 5*window_height/6, menuWidth_2, menuHeight_2};
+    SDL_RenderCopy(renderer, menuTexture_2, nullptr, &menuRect_2);
+    SDL_DestroyTexture(menuTexture_2);
+
+    if (menu_0) {
+        menuSurface_0 = IMG_LoadJPG_RW(SDL_RWFromFile("res/png/Menu/red0.jpg", "rb")); //让Surface打开一张图片
+        if (menuSurface_0  == nullptr) {
+            exit(-1);
+        }
+    } else {
+        menuSurface_0 = IMG_LoadJPG_RW(SDL_RWFromFile("res/png/Menu/black0.jpg", "rb")); //让Surface打开一张图片
+        if (menuSurface_0  == nullptr) {
+            exit(-1);
+        }
+    }
+    menuWidth_0 = menuSurface_0->w;
+    menuHeight_0 = menuSurface_0->h;
+
+    menuTexture_0 = SDL_CreateTextureFromSurface(renderer, menuSurface_0); //把Surface拷贝到Texture
+    SDL_FreeSurface(menuSurface_0);
+    menuSurface_0 = nullptr;
+
+    SDL_Rect menuRect_0 = {(minion_width-menuWidth_0)/2, 3*window_height/6, menuWidth_0, menuHeight_0};
+    SDL_RenderCopy(renderer, menuTexture_0, nullptr, &menuRect_0);
+    SDL_DestroyTexture(menuTexture_0);
 }
 
 
@@ -180,13 +249,32 @@ void Background::gameplay() { //游戏进程函数
                     if (state != PLAYING) {
                         state = PLAYING;
                     }
-                    if (event.button.y > 0 && event.button.y < window_height/3) {
-                        player -> playerType = 0;
-                    } else if (event.button.y > window_height/3 && event.button.y < 2*window_height/3) {
-                        player -> playerType = 1;
+                }
+            }
+
+            if (event.type == SDL_MOUSEMOTION) {
+                if (state == START) {
+                    if (event.motion.x > (minion_width-menuWidth_1)/2 && event.motion.x < (minion_width+menuWidth_1)/2
+                    && event.motion.y > 4*window_height/6 && event.motion.y < (4*window_height/6)+menuHeight_1) {
+                        menu_1 = true;
+                        player->playerType=1;
                     } else {
-                        player -> playerType = 2;
+                        menu_1 = false;
                     }
+                    if (event.motion.x > (minion_width-menuWidth_1)/2 && event.motion.x < (minion_width+menuWidth_1)/2
+                        && event.motion.y > 5*window_height/6 && event.motion.y < (5*window_height/6)+menuHeight_1) {
+                        menu_2 = true;
+                        player->playerType=2;
+                        } else {
+                            menu_2 = false;
+                        }
+                    if (event.motion.x > (minion_width-menuWidth_1)/2 && event.motion.x < (minion_width+menuWidth_1)/2
+                        && event.motion.y > 3*window_height/6 && event.motion.y < (3*window_height/6)+menuHeight_1) {
+                        menu_0 = true;
+                        player->playerType=0;
+                        } else {
+                            menu_0 = false;
+                        }
                 }
             }
 
@@ -281,6 +369,7 @@ void Background::render() { //设定渲染器的函数
     switch (state) {
         case START:
             SDL_RenderCopy(renderer, backgroundTexture, NULL, NULL);
+            this -> menuRender();
             break;
         case END:
             this->loadJPG("res/png/end.jpg");

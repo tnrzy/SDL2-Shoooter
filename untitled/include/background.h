@@ -34,6 +34,8 @@ public:
     // 析构函数
     ~Background();
 
+    void menuRender();
+
     void loadJPG(char* file);
     void loadPNG(char* file);
 
@@ -53,6 +55,18 @@ private:
     SDL_Renderer *renderer;
     SDL_Surface *backgroundSurface;
     SDL_Texture *backgroundTexture;
+
+    SDL_Renderer *menuRenderer_0;
+    SDL_Surface *menuSurface_0;
+    SDL_Texture *menuTexture_0;
+
+    SDL_Renderer *menuRenderer_2;
+    SDL_Surface *menuSurface_2;
+    SDL_Texture *menuTexture_2;
+
+    SDL_Renderer *menuRenderer_1;
+    SDL_Surface *menuSurface_1;
+    SDL_Texture *menuTexture_1;
 
     char *imageAccess; //用于得到图像文件
 
@@ -78,6 +92,17 @@ private:
     int skill_state;
     uint32_t skill_time;
     int dropnumber;
+
+    int menuWidth_0;
+    int menuHeight_0;
+    int menuWidth_1;
+    int menuHeight_1;
+    int menuWidth_2;
+    int menuHeight_2;
+
+    bool menu_1;
+    bool menu_2;
+    bool menu_0;
 };
 
 #endif // BACKGROUND_H
