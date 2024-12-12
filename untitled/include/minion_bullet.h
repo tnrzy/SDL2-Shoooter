@@ -61,7 +61,7 @@ public:
         }
     };
     minion_bullet(SDL_Renderer *renderer);
-    //~minion_bullet();
+    ~minion_bullet();
     void add_minion_bullet(int type,Enemy::enemy_info enemy);
     std::vector<mbullet_info*> positions;
     std::vector<SDL_Texture *> mbullet;

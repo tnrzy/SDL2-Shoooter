@@ -17,8 +17,8 @@ public:
                 this->position = minionrect;
                 this->type = 0;
                 this->dy = 2;
-                this->health = 2;
-                this ->max_health = 2;
+                this->health = 4;
+                this ->max_health = 4;
                 this ->health_bar = health_bar;
                 this ->drop_num = 2;
 
@@ -37,8 +37,8 @@ public:
                 this->position = minionrect;
                 this->type = 2;
                 this->dy = 1;
-                this->health = 4;
-                this->max_health = 4;
+                this->health = 7;
+                this->max_health = 7;
                 this -> health_bar = health_bar;
                 this ->drop_num = 3;
             }
