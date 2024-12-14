@@ -4,6 +4,8 @@
 #ifndef INC_3002_2_BOSS_H
 #define INC_3002_2_BOSS_H
 
+#include <boss_attack.h>
+
 #include "common.h"
 #include <random>
 #include <vector>
@@ -47,7 +49,7 @@ public:
         int drop_num;
     };
     bool t=true;
-    Boss(SDL_Renderer *renderer);
+    Boss(SDL_Renderer *renderer,Boss_attack *boss_attack);
 
     ~Boss();
 
@@ -57,7 +59,6 @@ public:
     static const int type_num = 1;
     const int max_pic[type_num]={12};
     std::vector<boss_info*> positions;
-    std::vector<SDL_Rect> minionPosition; //要让自机和子弹知道敌机的位置信息
     std::vector<int> widths[type_num];
     std::vector<int> heights[type_num];
 
@@ -81,5 +82,6 @@ protected: //可以设计子类访问
     int dy=0;
     int skill_type=-1;
     bool collision=false;
+    Boss_attack *boss_attack;
 };
 #endif //INC_3002_2_BOSS_H

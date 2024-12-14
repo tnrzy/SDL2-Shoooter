@@ -6,6 +6,7 @@
 
 #endif
 
+#include <Boss_attack.h>
 #include <SDL2/SDL.h>
 #include "enemy.h"
 #include "boss.h"
@@ -85,6 +86,7 @@ private:
     Sint32 playerY;
 
     Boss *boss;
+    Boss_attack *boss_attack;
     Bullet *bullet;
     drop_items *drop;
     enemy_controller *controller;

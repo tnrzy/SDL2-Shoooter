@@ -70,6 +70,10 @@ Background::~Background() { //销毁函数
         delete boss;
     }
 
+    if (boss_attack) {
+        delete boss_attack;
+    }
+
     if (player) {
         delete player;
     }
@@ -267,7 +271,8 @@ void Background::gameplay() { //游戏进程函数
     bullet = new Bullet(renderer);
     player = new Player(renderer);
     minion = new Enemy(renderer);
-    boss = new Boss(renderer);
+    boss_attack = new Boss_attack(renderer);
+    boss = new Boss(renderer,boss_attack);
     drop = new drop_items(renderer);
     controller = new enemy_controller();
     explosions = new minion_explosion(renderer);
@@ -428,6 +433,7 @@ void Background::render() { //设定渲染器的函数
 
             delete minion;
             delete boss;
+            delete boss_attack;
             delete bullet;
             delete player; //删除对象达到重新开始的效果,再次开始时需要重新创建
             delete drop;
@@ -437,7 +443,8 @@ void Background::render() { //设定渲染器的函数
             bullet = new Bullet(renderer);
             player = new Player(renderer);
             minion = new Enemy(renderer);
-            boss = new Boss(renderer);
+            boss_attack = new Boss_attack(renderer);
+            boss = new Boss(renderer,boss_attack);
             drop = new drop_items(renderer);
             explosions = new minion_explosion(renderer);
             controller = new enemy_controller();
@@ -460,6 +467,7 @@ void Background::render() { //设定渲染器的函数
             controller->renderenemies(minion,boss,renderer,minion_width,window_height);
             bullet->render(renderer, playerX, playerY, player,magic_point); //常规子弹的渲染
             player -> render(playerX, playerY); //利用传入的数据刷新player的渲染器；在此处渲染是为了保证每次渲染屏幕时，player都会被渲染到
+            boss_attack->render(renderer);
             drop ->render(renderer);
             this->fontrender(minion_width);
             int skill_type = 0;
@@ -599,11 +607,12 @@ void Background::render() { //设定渲染器的函数
                                     boss->skill(-1);
                                     boss->t=true;
                                     score+=(*bosses)->score;
+                                    boss_attack->positions.clear();
                                     drop ->add_drop((*bosses)->position[(*bosses)->state],(*bosses)->drop_num);
                                     if ((*bosses)->type==0&&(*bosses)->mode==3) explosions ->add_explosion((*bosses)->position[(*bosses)->state],(*bosses)->type+100);
                                     else {
                                         (*bosses)->position[(*bosses)->state].x=(*bosses)->position[(*bosses)->state].x+boss->widths[0][(*bosses)->state]/2-boss->widths[0][11]/2;
-                                        (*bosses)->position[(*bosses)->state].y=125;
+                                        (*bosses)->position[(*bosses)->state].y=5;
                                         explosions ->add_explosion((*bosses)->position[(*bosses)->state],(*bosses)->type+100);
                                     }
                                     //controller->boss_elimination((*bosses));
@@ -707,11 +716,12 @@ void Background::render() { //设定渲染器的函数
                                     boss->skill(-1);
                                     boss->t=true;
                                     score+=(*bosses)->score;
+                                    boss_attack->positions.clear();
                                     drop ->add_drop((*bosses)->position[(*bosses)->state],(*bosses)->drop_num);
                                     if ((*bosses)->type==0&&(*bosses)->mode==3) explosions ->add_explosion((*bosses)->position[(*bosses)->state],(*bosses)->type+100);
                                     else {
                                         (*bosses)->position[(*bosses)->state].x=(*bosses)->position[(*bosses)->state].x+boss->widths[0][(*bosses)->state]/2-boss->widths[0][11]/2;
-                                        (*bosses)->position[(*bosses)->state].y=125;
+                                        (*bosses)->position[(*bosses)->state].y=5;
                                         explosions ->add_explosion((*bosses)->position[(*bosses)->state],(*bosses)->type+100);
                                     }
                                     //controller->boss_elimination((*bosses));
@@ -807,12 +817,13 @@ void Background::render() { //设定渲染器的函数
                                     boss->skill(-1);
                                     boss->t=true;
                                     score+=(*bosses)->score;
+                                    boss_attack->positions.clear();
                                     drop ->add_drop((*bosses)->position[(*bosses)->state],(*bosses)->drop_num);
                                 //controller->minion_elimination((*bosses));
                                     if ((*bosses)->type==0&&(*bosses)->mode==3) explosions ->add_explosion((*bosses)->position[(*bosses)->state],(*bosses)->type+100);
                                     else {
                                         (*bosses)->position[(*bosses)->state].x=(*bosses)->position[(*bosses)->state].x+boss->widths[0][(*bosses)->state]/2-boss->widths[0][11]/2;
-                                        (*bosses)->position[(*bosses)->state].y=125;
+                                        (*bosses)->position[(*bosses)->state].y=5;
                                         explosions ->add_explosion((*bosses)->position[(*bosses)->state],(*bosses)->type+100);
                                     }
                                     bosses = boss->positions.erase(bosses);
@@ -857,7 +868,7 @@ void Background::render() { //设定渲染器的函数
                 }
             }
             explosions->render_explosion(renderer);
-            if (minion->check_collision(playerX,playerY,player->playerWidth,player->playerHeight)||boss->check_collision(playerX,playerY,player->playerWidth,player->playerHeight)){
+            if (minion->check_collision(playerX,playerY,player->playerWidth,player->playerHeight)||boss->check_collision(playerX,playerY,player->playerWidth,player->playerHeight)||boss_attack->check_collision(playerX,playerY,player->playerWidth,player->playerHeight)){
                 state = END;
                 playerX = minion_width / 2;
                 playerY = window_height / 2;
