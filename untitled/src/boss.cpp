@@ -274,7 +274,11 @@ void Boss::render(SDL_Renderer *renderer, int wide,int height,int playerX,int pl
                         std::uniform_int_distribution<int> d(-90,90);
                         for (int i=position->position[position->state].x+widths[position->type][position->state]/2-270+d(generator);i<=position->position[position->state].x+widths[position->type][position->state]/2+270+d(generator);i+=90) {
                             std::uniform_int_distribution<int> times(1,100);
-                            if (times(generator)>25) boss_attack->add_attack(3,i,position->position[position->state].y+heights[position->type][position->state]/2,
+                            if (skill_type==0) {
+                                if (times(generator)<=25) boss_attack->add_attack(3,i,position->position[position->state].y+heights[position->type][position->state]/2,
+                            -1);
+                            }
+                            else if (times(generator)>25) boss_attack->add_attack(3,i,position->position[position->state].y+heights[position->type][position->state]/2,
                             -1);
                         }
                         moveTime=stopTime;

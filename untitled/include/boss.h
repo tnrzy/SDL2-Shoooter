@@ -30,8 +30,8 @@ public:
             }
             if (type == 1){
                 this->score = 10;
-                this->health = 100;
-                this ->max_health = 100;
+                this->health = 110;
+                this ->max_health = 110;
                 this ->drop_num = 30;
             }
             for (auto i : minionrect) this->position.push_back(i);
