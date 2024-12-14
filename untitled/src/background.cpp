@@ -323,8 +323,8 @@ void Background::gameplay() { //游戏进程函数
             if (event.type == SDL_KEYDOWN) {
                 switch (event.key.keysym.sym) {
                     case SDLK_SPACE:
-                        if (state != PLAYING) {
-                            state = PLAYING;
+                        if (state != START) {
+                            state = START;
                         } break;
 
 
@@ -416,6 +416,8 @@ void Background::render() { //设定渲染器的函数
             this -> menuRender();
             genshinLength = window_height;
             genshinLength_2 =  genshinLength - genshinHeight;
+            magic_point = 0;
+            score = 0;
             genshinRender();
             break;
         case END:
