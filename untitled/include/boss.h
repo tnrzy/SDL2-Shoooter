@@ -16,20 +16,25 @@ public:
 
     public:
         boss_info(int type,std::vector<SDL_Rect> minionrect,SDL_Rect health_bar,SDL_Rect health_bar_back){
+            this->type = type;
+            this ->health_bar = health_bar;
+            this ->health_bar_back = health_bar_back;
             if (type == 0){
-                this->type = 0;
                 this->score = 10;
                 this->health = 100;
                 this ->max_health = 100;
                 // this->max_mode=4;
-                this ->health_bar = health_bar;
-                this ->health_bar_back = health_bar_back;
                 this ->drop_num = 30;
                 // this ->mode_pic={1,0,10,1};
                 // sum.push_back(1);
-                this->max_pic=12;
-                for (int i=0;i<max_pic;i++) this->position.push_back(minionrect[i]);
             }
+            if (type == 1){
+                this->score = 10;
+                this->health = 100;
+                this ->max_health = 100;
+                this ->drop_num = 30;
+            }
+            for (auto i : minionrect) this->position.push_back(i);
             // for (int i = 1; i < max_mode; i++) sum.push_back(sum[i-1]+mode_pic[i]);
         }
 
@@ -40,7 +45,6 @@ public:
         int type;
         // std::vector<int> mode_pic;
         // std::vector<int> sum;
-        int max_pic;
         int score;
         double health;
         int max_health;
@@ -53,11 +57,11 @@ public:
 
     ~Boss();
 
-    void render(SDL_Renderer *renderer, int width,int height); //用于敌人的渲染
+    void render(SDL_Renderer *renderer, int width,int height,int playerX,int playerY); //用于敌人的渲染
 
     void start(); //用于开始计时
-    static const int type_num = 1;
-    const int max_pic[type_num]={12};
+    static constexpr int type_num = 2;
+    int max_pic[type_num];
     std::vector<boss_info*> positions;
     std::vector<int> widths[type_num];
     std::vector<int> heights[type_num];
@@ -69,6 +73,7 @@ protected: //可以设计子类访问
     SDL_Surface *minionSurface;
     SDL_Texture *minionTexture;
     std::vector<SDL_Texture *> miniontextures[type_num];
+    int num=0;
 
     FILE *myLog;
 

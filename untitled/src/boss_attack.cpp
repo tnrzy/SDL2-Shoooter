@@ -50,30 +50,46 @@ Boss_attack::~Boss_attack() {
     }
 }
 
-void Boss_attack::add_attack(int type,int x,int y,int lasting) {
+void Boss_attack::add_attack(int type,int x,int y,int lasting,int playerX,int playerY) {
     std::vector<SDL_Rect> attackRect;
     attackRect.reserve(20);
     attackRect.push_back(SDL_Rect(0,0,0,0));
     for (int i=1;i<miniontextures[type].size();i++) {
-        int attackPositionX = x-widths[type][i]/2; //敌机的初始坐标
+        int attackPositionX = x-widths[type][i]/2;
         attackRect.push_back({attackPositionX, y, widths[type][i], heights[type][i]});
     }
-    attack_info *new_attack = new attack_info(type,attackRect,lasting);
+    attack_info *new_attack = new attack_info(type,attackRect,lasting,playerX,playerY);
     positions.push_back(new_attack);
 }
 
-void Boss_attack::render(SDL_Renderer *renderer) { //需要获取窗口的宽度；需要随机刷新敌机
+void Boss_attack::render(SDL_Renderer *renderer,int weight,int height) {
     uint32_t stopTime = SDL_GetTicks(); //stopTime随着call该render函数，每次都在更新
     if (!positions.empty()){
         for(int i = 0; i < positions.size(); i++){
-            switch (positions[i]->type) {
-                case 1:
-                    positions[i]->position[1].h=1000;
-                break;
+            if (positions[i]->type==1) {
+                positions[i]->position[1].h=1000;
             }
+            if (positions[i]->type==2) {
+                if (stopTime - positions[i]->startTime >=150) {
+                    int last=positions[i]->state;
+                    positions[i]->state=positions[i]->state%positions[i]->max_state+1;
+                    positions[i]->position[positions[i]->state]=positions[i]->position[last];
+                    positions[i]->startTime=stopTime;
+                }
+            }
+            if (positions[i]->type==3) {
+                if (stopTime - positions[i]->startTime >=150) {
+                    int last=positions[i]->state;
+                    positions[i]->state=positions[i]->state%positions[i]->max_state+1;
+                    positions[i]->position[positions[i]->state]=positions[i]->position[last];
+                    positions[i]->startTime=stopTime;
+                }
+            }
+            positions[i]->position[positions[i]->state].x+=positions[i]->dx;
+            positions[i]->position[positions[i]->state].y+=positions[i]->dy;
             SDL_Rect rect0 = positions[i]->position[positions[i]->state];
             SDL_RenderCopy(renderer,miniontextures[positions[i]->type][positions[i]->state], nullptr,&rect0);
-            if (positions[i]->lasting != -1&&stopTime - positions[i]->startTime >= positions[i]->lasting) {
+            if (positions[i]->lasting != -1&&stopTime - positions[i]->startTime >= positions[i]->lasting||positions[i]->position[positions[i]->state].y>height) {
                 positions.erase(positions.begin()+i);
             }
         }

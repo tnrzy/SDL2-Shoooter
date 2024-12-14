@@ -11,7 +11,8 @@ minion_explosion::minion_explosion(SDL_Renderer *renderer) {
     explosion0.reserve(7);
     explosion1.reserve(10);
     explosion2.reserve(9);
-    explosion2.reserve(9);
+    explosion100.reserve(10);
+    explosion101.reserve(9);
     positions.reserve(100);
     for (int i = 0; i < 7; i++) {
         std::string path = "res/png/explosion/explosion0/exp0" + std::to_string(i) + ".png";
@@ -57,6 +58,17 @@ minion_explosion::minion_explosion(SDL_Renderer *renderer) {
         SDL_FreeSurface(surf);
         surf = nullptr;
     }
+    for (int i = 0; i < 9; i++) {
+        std::string path = "res/png/explosion/explosion101/" + std::to_string(i) + ".png";
+        SDL_Surface *surf = IMG_LoadPNG_RW(SDL_RWFromFile(path.c_str(), "rb"));
+        if (!surf) {
+            fprintf(myLog, "SDL_explosion_Surface Error: %s\n", IMG_GetError());
+            exit(-5);
+        }
+        explosion101.push_back(SDL_CreateTextureFromSurface(renderer, surf));
+        SDL_FreeSurface(surf);
+        surf = nullptr;
+    }
 }
 
 minion_explosion::~minion_explosion(){
@@ -90,6 +102,12 @@ minion_explosion::~minion_explosion(){
         }
         explosion100.clear();
     }
+    if (!explosion101.empty()){
+        for (SDL_Texture * tex: explosion101){
+            SDL_DestroyTexture(tex);
+        }
+        explosion101.clear();
+    }
 }
 
 void minion_explosion::add_explosion(SDL_Rect rect, int type){
@@ -107,6 +125,10 @@ void minion_explosion::add_explosion(SDL_Rect rect, int type){
         positions.push_back(new_explosion);
     }
     if (type == 100){
+        new_explosion = new explosion_info(rect.x, rect.y, type);
+        positions.push_back(new_explosion);
+    }
+    if (type == 101){
         new_explosion = new explosion_info(rect.x, rect.y, type);
         positions.push_back(new_explosion);
     }
@@ -154,6 +176,16 @@ void minion_explosion::doexp(explosion_info* info, int type,SDL_Renderer* render
             info->startTime = stopTime;
         }
         SDL_RenderCopy(renderer, explosion100[info->pivot], nullptr, &info->rect);
+    }
+    if (type == 101){
+        if (stopTime-info->startTime > 150 ){
+            if (info->pivot <8) {
+                info->pivot = info->pivot+1;
+            }
+            else info->done = true;
+            info->startTime = stopTime;
+        }
+        SDL_RenderCopy(renderer, explosion101[info->pivot], nullptr, &info->rect);
     }
 }
 

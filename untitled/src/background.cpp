@@ -464,10 +464,10 @@ void Background::render() { //设定渲染器的函数
             SDL_RenderCopy(renderer, backgroundTexture, nullptr, nullptr);
             genshinRender();
             controller->updatestage(minion,boss);
-            controller->renderenemies(minion,boss,renderer,minion_width,window_height);
+            controller->renderenemies(minion,boss,renderer,minion_width,window_height,playerX,playerY);
             bullet->render(renderer, playerX, playerY, player,magic_point); //常规子弹的渲染
             player -> render(playerX, playerY); //利用传入的数据刷新player的渲染器；在此处渲染是为了保证每次渲染屏幕时，player都会被渲染到
-            boss_attack->render(renderer);
+            boss_attack->render(renderer,minion_width,window_height);
             drop ->render(renderer);
             this->fontrender(minion_width);
             int skill_type = 0;
@@ -819,7 +819,6 @@ void Background::render() { //设定渲染器的函数
                                     score+=(*bosses)->score;
                                     boss_attack->positions.clear();
                                     drop ->add_drop((*bosses)->position[(*bosses)->state],(*bosses)->drop_num);
-                                //controller->minion_elimination((*bosses));
                                     if ((*bosses)->type==0&&(*bosses)->mode==3) explosions ->add_explosion((*bosses)->position[(*bosses)->state],(*bosses)->type+100);
                                     else {
                                         (*bosses)->position[(*bosses)->state].x=(*bosses)->position[(*bosses)->state].x+boss->widths[0][(*bosses)->state]/2-boss->widths[0][11]/2;

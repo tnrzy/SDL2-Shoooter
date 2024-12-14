@@ -22,12 +22,13 @@ Boss::Boss(SDL_Renderer *renderer,Boss_attack *boss_attack) : minionSurface(null
     for (int i = 0; i < type_num; i++){
         widths[i].reserve(20);
         heights[i].reserve(20);
-        for (int j = 0; j < max_pic[i]; j++) {
+        for (int j = 0; ; j++) {
             std::string path = "res/png/boss/"+ std::to_string(i)+"/" + std::to_string(j) + ".png";
             SDL_Surface *surf = IMG_LoadPNG_RW(SDL_RWFromFile(path.c_str(),"rb"));
             if (!surf) {
                 fprintf(myLog, "SDL_Boss_Surface Error: %s\n", IMG_GetError());
-                exit(-5);
+                max_pic[i]=j;
+                break;
             }
             widths[i].push_back(surf->w);
             heights[i].push_back(surf->h);
@@ -53,13 +54,15 @@ Boss::~Boss() {
     }
 }
 
-void Boss::render(SDL_Renderer *renderer, int wide,int height) { //需要获取窗口的宽度；需要随机刷新敌机
+void Boss::render(SDL_Renderer *renderer, int wide,int height,int playerX,int playerY) { //需要获取窗口的宽度；需要随机刷新敌机
     uint32_t stopTime = SDL_GetTicks(); //stopTime随着call该render函数，每次都在更新
     static std::uniform_int_distribution<int> distribution(-1, 1);
     static std::uniform_int_distribution<int> type_distribution(0,type_num-1);
     if (t&&positions.empty()) { //每个ms刷新一次敌机；渲染的时间可能大于ms，所以用大于号
         generator.seed((unsigned)time(nullptr) + generator()); //对随机数种子更新
-        int miniontype = type_distribution(generator);
+        //int miniontype = type_distribution(generator);
+        int miniontype = num;
+        num=(num+1)%2;
 
         std::vector<SDL_Rect> minionRect;
         minionRect.reserve(20);
@@ -76,130 +79,218 @@ void Boss::render(SDL_Renderer *renderer, int wide,int height) { //需要获取�
         startTime = stopTime; //刷新一次敌机后，startTime会被更新一次
     }
     if (!positions.empty()){
-        for(int i = 0; i < positions.size(); i++){
+        for(auto & position : positions){
             generator.seed((unsigned)time(nullptr) + generator());
-            switch (positions[i]->type) {
-                case 0:
-                    if (positions[i]->mode==0) {
-                        positions[i] -> health=positions[i]->max_health;
-                        positions[i] -> health_bar.w=wide-8;
-                        int d_x=distribution(generator),d_y=distribution(generator);
-                        positions[i]->position[0].x+=d_x;
-                        positions[i]->position[0].y+=d_y;
-                        if (stopTime-startTime>=2000) {
-                            positions[i]->mode=1;
-                            positions[i]->position[0].x=wide/2-widths[0][0]/2;
-                            positions[i]->position[0].y=80;
-                            collision=true;
-                            startTime=stopTime;
-                        }
+            if (position->type==0) {
+                if (position->mode==0) {
+                    position -> health=position->max_health;
+                    position -> health_bar.w=wide-8;
+                    int d_x=distribution(generator),d_y=distribution(generator);
+                    position->position[0].x+=d_x;
+                    position->position[0].y+=d_y;
+                    if (stopTime-startTime>=2000) {
+                        position->mode=1;
+                        position->position[0].x=wide/2-widths[0][0]/2;
+                        position->position[0].y=80;
+                        collision=true;
+                        startTime=stopTime;
                     }
-                    else if (positions[i]->mode==1) {
-                        positions[i] -> health=positions[i]->max_health;
-                        positions[i] -> health_bar.w=wide-8;
-                        if (stopTime-startTime>=2000) {
-                            positions[i]->mode=2;
-                            positions[i]->state=1;
-                            dx=0;
-                            startTime=stopTime;
-                            moveTime=stopTime;
-                        }
+                }
+                else if (position->mode==1) {
+                    position -> health=position->max_health;
+                    position -> health_bar.w=wide-8;
+                    if (stopTime-startTime>=2000) {
+                        position->mode=2;
+                        position->state=1;
+                        dx=0;
+                        startTime=stopTime;
+                        moveTime=stopTime;
                     }
-                    else if (positions[i]->mode==2) {
-                        if (stopTime-startTime>=150) {
-                            positions[i] -> state++;
-                            if (positions[i]->state>10) {
-                                positions[i] -> state=1;
-                                positions[i]->position[1]=positions[i]->position[10];
-                                timer++;
-                                std::uniform_int_distribution<int> times(1,static_cast<int>(positions[i]->health)/10);
-                                if (timer>=times(generator)) {
-                                    timer=0;
-                                    positions[i]->position[11].x=positions[i]->position[1].x+widths[0][1]/2-widths[0][11]/2;
-                                    positions[i]->position[11].y=5;
-                                    positions[i]->mode=3;
-                                    positions[i]->state=11;
-                                    dx=dy=0;
-                                    startTime=stopTime;
+                }
+                else if (position->mode==2) {
+                    if (stopTime-startTime>=150) {
+                        position -> state++;
+                        if (position->state>10) {
+                            position -> state=1;
+                            position->position[1]=position->position[10];
+                            timer++;
+                            std::uniform_int_distribution<int> times(1,static_cast<int>(position->health));
+                            if (timer>=times(generator)) {
+                                timer=0;
+                                position->position[11].x=position->position[1].x+widths[0][1]/2-widths[0][11]/2;
+                                position->position[11].y=5;
+                                position->mode=3;
+                                position->state=11;
+                                dx=dy=0;
+                                startTime=stopTime;
+                                moveTime=stopTime;
+                            }
+                        }
+                        else if (position->state>1){
+                            position->position[position->state]=position->position[position->state-1];
+                            if (position->state==2) {
+                                std::uniform_int_distribution<int> times(1,100);
+                                if (times(generator)>75) {
+                                    position->mode=4;
+                                    moveTime=stopTime;
+                                    dx=0;
+                                }
+                            }
+                        }
+                        //if (positions[i] -> state>=positions[i] -> sum[positions[i] ->mode]) positions[i] -> state=positions[i] -> sum[positions[i] ->mode]-positions[i] -> mode_pic[positions[i] ->mode];
+                        startTime=stopTime;
+                    }
+                    if (stopTime-moveTime>=1000) {
+                        dx=distribution(generator);
+                        if (position->position[position->state].x<=5) dx=abs(dx);
+                        if (position->position[position->state].x+widths[0][position->state]>=wide-5) dx=-abs(dx);
+                        moveTime=stopTime;
+                    }
+                        position->position[position->state].x+=dx;
+                }
+                else if (position->mode==3) {
+                    if (stopTime-moveTime>=1000) {
+                        dx=distribution(generator);
+                        dy=distribution(generator);
+                        if (position->position[position->state].x<=5) dx=abs(dx);
+                        if (position->position[position->state].x+widths[0][position->state]>=wide-5) dx=-abs(dx);
+                        if (position->position[position->state].y<=205) dy=abs(dy);
+                        if (position->position[position->state].y+heights[0][position->state]>=height-300) dy=-abs(dy);
+                        moveTime=stopTime;
+                    }
+
+                    position->position[position->state].x+=dx;
+                    position->position[position->state].y+=dy;
+                    if (position->health<position->max_health) {
+                        if (skill_type==0) {
+                            position->health+=0.001;
+                        }
+                        else position->health+=0.09;
+                        double k = (wide-12) * (position->health)/(position->max_health);
+                        position->health_bar.w = static_cast<int>(std::round(k));
+                    }
+                    if (stopTime-startTime>=7000) {
+                        position->mode=2;
+                        position->state=1;
+                        startTime=stopTime;
+                        moveTime=stopTime;
+                    }
+                }
+                else{
+                    if (stopTime-startTime>=1500&&startTime!=-1) {
+                        boss_attack->add_attack(1,position->position[position->state].x+widths[position->type][position->state]/2,position->position[position->state].y+heights[position->type][position->state]/2,
+                            2000);
+                        startTime=-1;
+                        moveTime=stopTime;
+                    }
+                    if (stopTime-moveTime>=2000) {
+                        position->mode=2;
+                        startTime=stopTime;
+                        moveTime=stopTime;
+                    }
+                }
+            }
+
+            if (position->type==1) {
+                if (position->health<=10) {
+                    position->state=1;
+                    position->position[1].x=wide/2-widths[position->type][1]/2;
+                    int d_x=distribution(generator),d_y=distribution(generator);
+                    position->position[1].x+=d_x;
+                    position->position[1].y+=d_y;
+                    if (stopTime-startTime<=3000) {
+                        position->health=10;
+                    }
+                    else {
+                        position->health=0;
+                    }
+                    double k = (wide-12) * (position->health)/(position->max_health);
+                    position->health_bar.w = static_cast<int>(std::round(k));
+                }
+                else if (position->mode==0) {
+                    position -> health=position->max_health;
+                    position -> health_bar.w=wide-8;
+                    if (stopTime-startTime>=2000) {
+                        position->mode=1;
+                        collision=true;
+                        startTime=stopTime;
+                        moveTime=stopTime;
+                    }
+                }
+                else if (position->mode==1) {
+                    if (stopTime-startTime>=150) {
+                        position -> state++;
+                        if (position->state>9) {
+                            position -> state=0;
+                            position->position[0]=position->position[9];
+                            std::uniform_int_distribution<int> times(1,100);
+                            if (times(generator)<=50) {
+                                position->mode=2;
+                            }
+                        }
+                        else if (position->state>0){
+                            position->position[position->state]=position->position[position->state-1];
+                            if (position->state==3) {
+                                std::uniform_int_distribution<int> times(1,100);
+                                if (times(generator)>50) {
+                                    position->mode=4;
                                     moveTime=stopTime;
                                 }
                             }
-                            else if (positions[i]->state>1){
-                                positions[i]->position[positions[i]->state]=positions[i]->position[positions[i]->state-1];
-                                if (positions[i]->state==2) {
-                                    std::uniform_int_distribution<int> times(1,100);
-                                    if (times(generator)>75) {
-                                        positions[i]->mode=4;
-                                        moveTime=stopTime;
-                                        dx=0;
-                                    }
-                                }
-                            }
-                            //if (positions[i] -> state>=positions[i] -> sum[positions[i] ->mode]) positions[i] -> state=positions[i] -> sum[positions[i] ->mode]-positions[i] -> mode_pic[positions[i] ->mode];
-                            startTime=stopTime;
                         }
-                        if (stopTime-moveTime>=1000) {
-                            dx=distribution(generator);
-                            if (positions[i]->position[positions[i]->state].x<=5) dx=abs(dx);
-                            if (positions[i]->position[positions[i]->state].x+widths[0][positions[i]->state]>=wide-5) dx=-abs(dx);
-                            moveTime=stopTime;
-                        }
-                        positions[i]->position[positions[i]->state].x+=dx;
+                        startTime=stopTime;
                     }
-                    else if (positions[i]->mode==3) {
-                        if (stopTime-moveTime>=1000) {
-                            dx=distribution(generator);
-                            dy=distribution(generator);
-                            if (positions[i]->position[positions[i]->state].x<=5) dx=abs(dx);
-                            if (positions[i]->position[positions[i]->state].x+widths[0][positions[i]->state]>=wide-5) dx=-abs(dx);
-                            if (positions[i]->position[positions[i]->state].y<=205) dy=abs(dy);
-                            if (positions[i]->position[positions[i]->state].y+heights[0][positions[i]->state]>=height-300) dy=-abs(dy);
-                            moveTime=stopTime;
-                        }
-
-                        positions[i]->position[positions[i]->state].x+=dx;
-                        positions[i]->position[positions[i]->state].y+=dy;
-                        if (positions[i]->health<positions[i]->max_health) {
-                            if (skill_type==0) {
-                                positions[i]->health+=0.001;
-                            }
-                            else positions[i]->health+=0.04;
-                        }
-                        double k = (wide-12) * (positions[i]->health)/(positions[i]->max_health);
-                        positions[i]->health_bar.w = static_cast<int>(std::round(k));
-
-                        if (stopTime-startTime>=10000) {
-                            positions[i]->mode=2;
-                            positions[i]->state=1;
-                            startTime=stopTime;
-                            moveTime=stopTime;
-                        }
+                    if (stopTime-moveTime>=1000) {
+                        dx=distribution(generator);
+                        if (position->position[position->state].x<=5) dx=abs(dx);
+                        if (position->position[position->state].x+widths[0][position->state]>=wide-5) dx=-abs(dx);
+                        moveTime=stopTime;
                     }
-                    else{
-                        if (stopTime-startTime>=2000&&startTime!=-1) {
-                            boss_attack->add_attack(1,positions[i]->position[positions[i]->state].x+widths[positions[i]->type][positions[i]->state]/2,positions[i]->position[positions[i]->state].y+heights[positions[i]->type][positions[i]->state]/2,5000);
-                            startTime=-1;
-                            moveTime=stopTime;
+                    position->position[position->state].x+=dx;
+                }
+                else if (position->mode==2) {
+                    if (stopTime-startTime>=3000) {
+                        std::uniform_int_distribution<int> times(1,100);
+                        if (times(generator)<=50) {
+                            position->mode=3;
                         }
-                        if (stopTime-moveTime>=5000) {
-                            positions[i]->mode=2;
-                            startTime=stopTime;
-                            moveTime=stopTime;
-                        }
+                        else position->mode=1;
                     }
-
-                break;
+                }
+                else if (position->mode==3) {
+                    boss_attack->add_attack(2,position->position[position->state].x,position->position[position->state].y+heights[position->type][position->state]/2,
+                            -1,playerX,playerY);
+                    boss_attack->add_attack(2,position->position[position->state].x+widths[position->type][position->state],position->position[position->state].y+heights[position->type][position->state]/2,
+                            -1,playerX,playerY);
+                    position->mode=1;
+                }
+                else if (position->mode==4) {
+                    if (stopTime-startTime>=7000) {
+                        startTime=stopTime;
+                        moveTime=stopTime;
+                        position->mode=2;
+                    }
+                    if (stopTime-moveTime>=2000) {
+                        std::uniform_int_distribution<int> d(-90,90);
+                        for (int i=position->position[position->state].x+widths[position->type][position->state]/2-270+d(generator);i<=position->position[position->state].x+widths[position->type][position->state]/2+270+d(generator);i+=90) {
+                            std::uniform_int_distribution<int> times(1,100);
+                            if (times(generator)>25) boss_attack->add_attack(3,i,position->position[position->state].y+heights[position->type][position->state]/2,
+                            -1);
+                        }
+                        moveTime=stopTime;
+                    }
+                }
             }
-            SDL_Rect rect0 = positions[i]->position[positions[i]->state];
-            SDL_RenderCopy(renderer,miniontextures[positions[i]->type][positions[i]->state], nullptr,&rect0);
+            SDL_Rect rect0 = position->position[position->state];
+            SDL_RenderCopy(renderer,miniontextures[position->type][position->state], nullptr,&rect0);
 
             SDL_SetRenderDrawBlendMode(renderer, SDL_BLENDMODE_BLEND);
             SDL_SetRenderDrawColor(renderer, 0, 0, 0, 191);
-            SDL_Rect rect1 = positions[i] -> health_bar_back;
+            SDL_Rect rect1 = position -> health_bar_back;
             SDL_RenderFillRect(renderer,&rect1);
 
             SDL_SetRenderDrawColor(renderer, 255, 0, 0, 191);
-            SDL_Rect rect2 = positions[i] -> health_bar;
+            SDL_Rect rect2 = position -> health_bar;
             SDL_RenderFillRect(renderer,&rect2);
         }
     }

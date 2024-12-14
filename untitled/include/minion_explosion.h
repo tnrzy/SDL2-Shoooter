@@ -41,7 +41,10 @@ public:
                 auto exp = SDL_Rect(x,y,300,300);
                 this->rect = exp;
             }
-
+            if (type == 101){
+                auto exp = SDL_Rect(x,y,300,300);
+                this->rect = exp;
+            }
 
         }
     };
@@ -55,6 +58,7 @@ protected:
     std::vector<SDL_Texture *> explosion1;
     std::vector<SDL_Texture *> explosion2;
     std::vector<SDL_Texture *> explosion100;
+    std::vector<SDL_Texture *> explosion101;
     FILE *myLog;
     bool done;
 

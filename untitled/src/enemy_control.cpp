@@ -11,7 +11,7 @@ enemy_controller::enemy_controller() {
 
 }
 enemy_controller::~enemy_controller()= default;
-void enemy_controller::renderenemies(Enemy *minions,Boss *boss,SDL_Renderer *renderer, int wide,int height) {
+void enemy_controller::renderenemies(Enemy *minions,Boss *boss,SDL_Renderer *renderer, int wide,int height,int playerX,int playerY) {
     if (state == 0){
         minions->render(renderer,wide,true);   //正常状态，只渲染普通敌人
     }
@@ -19,7 +19,7 @@ void enemy_controller::renderenemies(Enemy *minions,Boss *boss,SDL_Renderer *ren
         minions->render(renderer,wide,false);  // 过渡状态，不再生成新的敌人
     }
     if (state == 2){
-         boss->render(renderer,wide,height);//渲染boss，不渲染普通敌人
+         boss->render(renderer,wide,height,playerX,playerY);//渲染boss，不渲染普通敌人
     }
 }
 void enemy_controller::minion_elimination(Enemy::enemy_info *enemyinfo){
