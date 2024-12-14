@@ -31,6 +31,9 @@ drop_items:: ~drop_items(){
     if (dropTexture) {
         SDL_DestroyTexture(dropTexture);
     }
+    if (!dropposition.empty()){
+        dropposition.clear();
+    }
 
 }
 

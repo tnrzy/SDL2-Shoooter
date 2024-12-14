@@ -39,6 +39,7 @@ void enemy_controller::updatestage(Enemy* minions,Boss* boss) { //阶段检测�
         if(boss->positions.empty()&&generated){ //boss死亡转回一阶段
             state = 0;
             counter = 0;
+            minions->enemy_buff +=1;
             generated=false;
         }
         else generated=true;

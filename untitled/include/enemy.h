@@ -11,14 +11,14 @@ public:
     class enemy_info {
 
     public:
-        enemy_info(int type,SDL_Rect minionrect,SDL_Rect health_bar){
+        enemy_info(int type,SDL_Rect minionrect,SDL_Rect health_bar,int buff){
             this ->bullet_timer = 0;
             if (type == 0){
                 this->position = minionrect;
                 this->type = 0;
                 this->dy = 2;
-                this->health = 4;
-                this ->max_health = 4;
+                this->health = 4 + buff;
+                this ->max_health = 4 + buff;
                 this ->health_bar = health_bar;
                 this ->drop_num = 2;
 
@@ -28,8 +28,8 @@ public:
                 this->position = minionrect;
                 this->type = 1;
                 this->dy = 3;
-                this->health = 1;
-                this->max_health = 1;
+                this->health = 1 + buff;
+                this->max_health = 1 + buff;
                 this -> health_bar = health_bar;
                 this ->drop_num = 1;
             }
@@ -37,8 +37,8 @@ public:
                 this->position = minionrect;
                 this->type = 2;
                 this->dy = 1;
-                this->health = 7;
-                this->max_health = 7;
+                this->health = 7 + buff ;
+                this->max_health = 7 + buff;
                 this -> health_bar = health_bar;
                 this ->drop_num = 3;
             }
@@ -69,6 +69,9 @@ public:
 
     bool check_collision(int playerX, int playerY, int player_width, int player_height);
     void updateattack();
+    int generate_timer;
+    int generate_interval;
+    int enemy_buff;
 protected: //可以设计子类访问
     int type_num = 3;
     SDL_Surface *minionSurface;

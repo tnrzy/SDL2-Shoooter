@@ -19,17 +19,17 @@ public:
             this->dy = dy;
             this->dx = dx;
             if (type == 0){
-                auto bul = SDL_Rect(x-5,y-20,10,35);
+                auto bul = SDL_Rect(x-5,y-20,15,50);
                 this ->rect = bul;
                 this ->mtype = 0;
             }
             if (type == 1){
-                auto bul = SDL_Rect(x-25,y-20,10,35);
+                auto bul = SDL_Rect(x-25,y-20,15,50);
                 this ->rect = bul;
                 this ->mtype = 0;
             }
             if (type == 2){
-                auto bul = SDL_Rect(x+15,y-20,10,35);
+                auto bul = SDL_Rect(x+15,y-20,15,50);
                 this ->rect = bul;
                 this ->mtype = 0;
             }

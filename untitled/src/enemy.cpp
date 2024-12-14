@@ -24,6 +24,9 @@ Enemy::Enemy(SDL_Renderer *renderer) : minionSurface(nullptr), minionTexture(nul
         SDL_FreeSurface(surf);
         surf= nullptr;
     }
+    generate_interval = 2500;
+    generate_timer = 0;
+    enemy_buff = 0;
 }
 
 Enemy::~Enemy() {
@@ -35,24 +38,51 @@ Enemy::~Enemy() {
         SDL_FreeSurface(minionSurface);
     }
 
-    if (minionTexture) {
-        SDL_DestroyTexture(minionTexture);
+    if (!miniontextures.empty()) {
+        for (SDL_Texture *tex : miniontextures){
+            SDL_DestroyTexture(tex);
+        }
+        miniontextures.clear();
     }
+    if (!positions.empty()){
+        positions.clear();
+    }
+    if (!widths.empty()){
+        widths.clear();
+    }
+    if (!heights.empty()){}
+    heights.clear();
 }
 
 void Enemy::render(SDL_Renderer *renderer, int wide,bool generating) {  //需要获取窗口的宽度；需要随机刷新敌机
+    if (generate_timer <= 4000){
+        generate_timer++;
+        if (generate_timer == 1000){
+            generate_interval = 1500;
+        }
+        if (generate_timer == 2000){
+            generate_interval = 800;
+        }
+        if (generate_timer == 3000){
+            enemy_buff += 1;
+        }
+        if (generate_timer == 4000){
+            enemy_buff += 1;
+        }
+    }
+
     uint32_t stopTime = SDL_GetTicks(); //stopTime随着call该render函数，每次都在更新
     static std::uniform_int_distribution<int> distribution(0, wide);
     static std::uniform_int_distribution<int> type_distribution(0,type_num-1);
     SDL_SetRenderDrawColor(renderer,255,0,0,255);
-    if (stopTime - startTime >= 800 && generating) {  //每个ms刷新一次敌机；渲染的时间可能大于ms，所以用大于号
+    if (stopTime - startTime >= generate_interval && generating) {  //每个ms刷新一次敌机；渲染的时间可能大于ms，所以用大于号
         generator.seed((unsigned)time(nullptr) + generator()); //对随机数种子更新
 
         int minionPositionX = distribution(generator); //随机产生敌机的坐标
         int miniontype = type_distribution(generator);
         SDL_Rect minionRect = {minionPositionX, 0, widths[miniontype], heights[miniontype]};
         SDL_Rect health_bar = {minionPositionX,-10,widths[miniontype],5};
-        enemy_info *new_minion = new enemy_info(miniontype,minionRect,health_bar);
+        enemy_info *new_minion = new enemy_info(miniontype,minionRect,health_bar,enemy_buff);
         positions.reserve(100);
         positions.push_back(new_minion);
 

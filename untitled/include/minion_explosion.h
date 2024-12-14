@@ -46,6 +46,7 @@ public:
         }
     };
     minion_explosion(SDL_Renderer *renderer);
+    ~minion_explosion();
     void add_explosion(SDL_Rect, int type);
     void render_explosion(SDL_Renderer *renderer);
 protected:

@@ -59,7 +59,38 @@ minion_explosion::minion_explosion(SDL_Renderer *renderer) {
     }
 }
 
-
+minion_explosion::~minion_explosion(){
+    if (myLog){
+        fclose(myLog);
+    }
+    if (!positions.empty()){
+        positions.clear();
+    }
+    if (!explosion0.empty()){
+        for (SDL_Texture * tex: explosion0){
+            SDL_DestroyTexture(tex);
+        }
+        explosion0.clear();
+    }
+    if (!explosion1.empty()){
+        for (SDL_Texture * tex: explosion1){
+            SDL_DestroyTexture(tex);
+        }
+        explosion1.clear();
+    }
+    if (!explosion2.empty()){
+        for (SDL_Texture * tex: explosion2){
+            SDL_DestroyTexture(tex);
+        }
+        explosion2.clear();
+    }
+    if (!explosion100.empty()){
+        for (SDL_Texture * tex: explosion100){
+            SDL_DestroyTexture(tex);
+        }
+        explosion100.clear();
+    }
+}
 
 void minion_explosion::add_explosion(SDL_Rect rect, int type){
     explosion_info *new_explosion;
