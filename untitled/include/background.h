@@ -35,6 +35,7 @@ public:
     ~Background();
 
     void menuRender();
+    void genshinRender();
 
     void loadJPG(char* file);
     void loadPNG(char* file);
@@ -68,6 +69,9 @@ private:
     SDL_Surface *menuSurface_1;
     SDL_Texture *menuTexture_1;
 
+    SDL_Surface *genshinSurface;
+    SDL_Texture *genshinTexture;
+
     char *imageAccess; //用于得到图像文件
 
     FILE *myLog;
@@ -99,6 +103,11 @@ private:
     int menuHeight_1;
     int menuWidth_2;
     int menuHeight_2;
+
+    int genshinWidth;
+    int genshinHeight;
+    int genshinLength;
+    int genshinCount;
 
     bool menu_1;
     bool menu_2;

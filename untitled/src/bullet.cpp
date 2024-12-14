@@ -141,9 +141,9 @@ void Bullet::render(SDL_Renderer *renderer, int x, int y, Player *player,double 
             startTime = stopTime;
         }
         if (attack == true) {
-            if (magic_point >= 1 && magic_point <= 2) {
+            if (magic_point >= 1 && magic_point < 2) {
                 firePoint = 1;
-            } else if (magic_point >= 2 && magic_point <= 3) {
+            } else if (magic_point >= 2 && magic_point < 3) {
                 firePoint = 2;
             } else if (magic_point >= 3 && magic_point <= 4) {
                 firePoint = 2;
