@@ -21,7 +21,7 @@ using namespace std;
 #define FRAMERATE 60 //帧率控制为60
 
 
-Background::Background() : myLog(nullptr), state(START), window(nullptr), imageAccess(nullptr), genshinLength(0), genshinCount(0), genshinNum(3),
+Background::Background() : myLog(nullptr), state(START), window(nullptr), imageAccess(nullptr), genshinLength(0), genshinCount(0), genshinNum(5), genshinLength_2(0),
 renderer(nullptr), backgroundSurface(nullptr), backgroundTexture(nullptr), menu_0(false), menu_1(false), menu_2(false){ //构造函数;立即初始化右边变量
     window = nullptr;
     renderer = nullptr;
@@ -120,21 +120,43 @@ void Background::loadPNG(char *file) {
 }
 
 void Background::genshinRender() {
-    genshinSurface = IMG_LoadJPG_RW(SDL_RWFromFile("res/png/genshin.jpg", "rb")); //让Surface打开一张图片
-    if (genshinSurface  == nullptr) {
-        exit(-1);
+    if (state == PLAYING) {
+        genshinSurface = IMG_LoadJPG_RW(SDL_RWFromFile("res/png/water.jpg", "rb")); //让Surface打开一张图片
+        if (genshinSurface  == nullptr) {
+            exit(-1);
+        }
+
+        genshinWidth = genshinSurface->w;
+        genshinHeight = genshinSurface->h;
+
+        genshinTexture = SDL_CreateTextureFromSurface(renderer, genshinSurface); //把Surface拷贝到Texture
+        SDL_FreeSurface(genshinSurface);
+        genshinSurface = nullptr;
+
+        SDL_Rect genshinRect = {0, genshinLength, genshinWidth, genshinHeight};
+        SDL_RenderCopy(renderer, genshinTexture, nullptr, &genshinRect);
+
+        genshinRect = {0, genshinLength_2, genshinWidth, genshinHeight};
+        SDL_RenderCopy(renderer, genshinTexture, nullptr, &genshinRect);
+        SDL_DestroyTexture(genshinTexture);
+
+    } else {
+        genshinSurface = IMG_LoadJPG_RW(SDL_RWFromFile("res/png/genshin.jpg", "rb")); //让Surface打开一张图片
+        if (genshinSurface  == nullptr) {
+            exit(-1);
+        }
+        genshinWidth = genshinSurface->w;
+        genshinHeight = genshinSurface->h;
+
+        genshinTexture = SDL_CreateTextureFromSurface(renderer, genshinSurface); //把Surface拷贝到Texture
+        SDL_FreeSurface(genshinSurface);
+        genshinSurface = nullptr;
+
+        SDL_Rect genshinRect = {(minion_width-genshinWidth)/2, genshinLength, genshinWidth, genshinHeight};
+
+        SDL_RenderCopy(renderer, genshinTexture, nullptr, &genshinRect);
+        SDL_DestroyTexture(genshinTexture);
     }
-    genshinWidth = genshinSurface->w;
-    genshinHeight = genshinSurface->h;
-
-    genshinTexture = SDL_CreateTextureFromSurface(renderer, genshinSurface); //把Surface拷贝到Texture
-    SDL_FreeSurface(genshinSurface);
-    genshinSurface = nullptr;
-
-    SDL_Rect genshinRect = {(minion_width-genshinWidth)/2, genshinLength, genshinWidth, genshinHeight};
-
-    SDL_RenderCopy(renderer, genshinTexture, nullptr, &genshinRect);
-    SDL_DestroyTexture(genshinTexture);
 
 }
 
@@ -309,7 +331,7 @@ void Background::gameplay() { //游戏进程函数
                     case SDLK_LSHIFT:
                         isTurbo = true; // 当键被按下时，开启加速模式
                         player -> turbo = true;
-                        genshinNum = 1;
+                        genshinNum = 5;
                         break;
 
 
@@ -327,7 +349,7 @@ void Background::gameplay() { //游戏进程函数
                 if (event.key.keysym.sym == SDLK_LSHIFT) {
                     isTurbo = false; // 当键被释放时，关闭加速模式
                     player -> turbo = false;
-                    genshinNum = 3;
+                    genshinNum = 5;
                 }
             }
 
@@ -392,6 +414,9 @@ void Background::render() { //设定渲染器的函数
         case START:
             SDL_RenderCopy(renderer, backgroundTexture, NULL, NULL);
             this -> menuRender();
+            genshinLength = window_height;
+            genshinLength_2 =  genshinLength - genshinHeight;
+            genshinRender();
             break;
         case END:
             this->loadJPG("res/png/end.jpg");
@@ -419,9 +444,13 @@ void Background::render() { //设定渲染器的函数
             break;
         case PLAYING:
             this->loadJPG("res/png/background.jpg");
-            genshinLength = genshinLength+genshinNum;
+            genshinLength = genshinLength + genshinNum;
+            genshinLength_2 = genshinLength_2 + genshinNum;
             if (genshinLength > window_height) {
-            genshinLength = -genshinHeight;
+                genshinLength = -genshinHeight;
+            }
+            if (genshinLength_2 > window_height) {
+                genshinLength_2 = -genshinHeight;
             }
             SDL_RenderCopy(renderer, backgroundTexture, nullptr, nullptr);
             genshinRender();

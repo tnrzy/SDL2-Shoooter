@@ -107,6 +107,7 @@ private:
     int genshinWidth;
     int genshinHeight;
     int genshinLength;
+    int genshinLength_2;
     int genshinCount;
 
     int genshinNum;
