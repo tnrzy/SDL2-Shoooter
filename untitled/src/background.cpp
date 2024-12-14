@@ -21,7 +21,7 @@ using namespace std;
 #define FRAMERATE 60 //帧率控制为60
 
 
-Background::Background() : myLog(nullptr), state(START), window(nullptr), imageAccess(nullptr), genshinLength(0), genshinCount(0),
+Background::Background() : myLog(nullptr), state(START), window(nullptr), imageAccess(nullptr), genshinLength(0), genshinCount(0), genshinNum(3),
 renderer(nullptr), backgroundSurface(nullptr), backgroundTexture(nullptr), menu_0(false), menu_1(false), menu_2(false){ //构造函数;立即初始化右边变量
     window = nullptr;
     renderer = nullptr;
@@ -309,6 +309,7 @@ void Background::gameplay() { //游戏进程函数
                     case SDLK_LSHIFT:
                         isTurbo = true; // 当键被按下时，开启加速模式
                         player -> turbo = true;
+                        genshinNum = 1;
                         break;
 
 
@@ -326,6 +327,7 @@ void Background::gameplay() { //游戏进程函数
                 if (event.key.keysym.sym == SDLK_LSHIFT) {
                     isTurbo = false; // 当键被释放时，关闭加速模式
                     player -> turbo = false;
+                    genshinNum = 3;
                 }
             }
 
@@ -417,10 +419,9 @@ void Background::render() { //设定渲染器的函数
             break;
         case PLAYING:
             this->loadJPG("res/png/background.jpg");
-            genshinCount+=1;
-            if (genshinCount >= 2) {
-                genshinLength = (genshinLength+1)%window_height;
-                genshinCount = 0;
+            genshinLength = genshinLength+genshinNum;
+            if (genshinLength > window_height) {
+            genshinLength = -genshinHeight;
             }
             SDL_RenderCopy(renderer, backgroundTexture, nullptr, nullptr);
             genshinRender();

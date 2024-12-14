@@ -39,7 +39,7 @@ Bullet::~Bullet() {
 void Bullet::FireRender (SDL_Renderer *renderer, int fireCount) {
 
 
-    if (magic_point >= 0 && magic_point <= 3) {
+    if (magic_point >= 0 && magic_point < 3) {
         if (fireCount == 0) {
             bulletSurface = IMG_LoadPNG_RW(SDL_RWFromFile("res/png/Fire/Fire0.png", "rb"));
         } else if (fireCount == 1) {

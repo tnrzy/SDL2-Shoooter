@@ -109,6 +109,8 @@ private:
     int genshinLength;
     int genshinCount;
 
+    int genshinNum;
+
     bool menu_1;
     bool menu_2;
     bool menu_0;

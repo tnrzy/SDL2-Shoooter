@@ -78,7 +78,7 @@ void Enemy::render(SDL_Renderer *renderer, int wide,bool generating) {  //需要
     if (stopTime - startTime >= generate_interval && generating) {  //每个ms刷新一次敌机；渲染的时间可能大于ms，所以用大于号
         generator.seed((unsigned)time(nullptr) + generator()); //对随机数种子更新
 
-        int minionPositionX = distribution(generator); //随机产生敌机的坐标
+        int minionPositionX = 0.8 * distribution(generator); //随机产生敌机的坐标
         int miniontype = type_distribution(generator);
         SDL_Rect minionRect = {minionPositionX, 0, widths[miniontype], heights[miniontype]};
         SDL_Rect health_bar = {minionPositionX,-10,widths[miniontype],5};
