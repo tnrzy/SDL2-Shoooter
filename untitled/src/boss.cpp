@@ -224,7 +224,7 @@ void Boss::render(SDL_Renderer *renderer, int wide,int height,int playerX,int pl
                             position -> state=0;
                             position->position[0]=position->position[9];
                             std::uniform_int_distribution<int> times(1,100);
-                            if (times(generator)<=50) {
+                            if (times(generator)<=75) {
                                 position->mode=2;
                             }
                         }
@@ -232,7 +232,7 @@ void Boss::render(SDL_Renderer *renderer, int wide,int height,int playerX,int pl
                             position->position[position->state]=position->position[position->state-1];
                             if (position->state==3) {
                                 std::uniform_int_distribution<int> times(1,100);
-                                if (times(generator)>50) {
+                                if (times(generator)>25) {
                                     position->mode=4;
                                     moveTime=stopTime;
                                 }
@@ -278,8 +278,14 @@ void Boss::render(SDL_Renderer *renderer, int wide,int height,int playerX,int pl
                                 if (times(generator)<=25) boss_attack->add_attack(3,i,position->position[position->state].y+heights[position->type][position->state]/2,
                             -1);
                             }
-                            else if (times(generator)>25) boss_attack->add_attack(3,i,position->position[position->state].y+heights[position->type][position->state]/2,
+                            else if (times(generator)>25) {
+                                boss_attack->add_attack(3,i,position->position[position->state].y+heights[position->type][position->state]/2,
                             -1);
+                                boss_attack->add_attack(2,position->position[position->state].x,position->position[position->state].y+heights[position->type][position->state]/2,
+                            -1,playerX,playerY);
+                                boss_attack->add_attack(2,position->position[position->state].x+widths[position->type][position->state],position->position[position->state].y+heights[position->type][position->state]/2,
+                                        -1,playerX,playerY);
+                            }
                         }
                         moveTime=stopTime;
                     }

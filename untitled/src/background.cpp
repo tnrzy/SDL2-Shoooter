@@ -535,7 +535,7 @@ void Background::render() { //设定渲染器的函数
                             }
                             if (itMinion != minion->positions.end()) {
                                 //防止数组越界
-                                (*itMinion)->health = (*itMinion)->health - 1;
+                                (*itMinion)->health = (*itMinion)->health - 0.2;
                                 double k = (*itMinion)->position.w * ((*itMinion)->health) / ((*itMinion)->
                                                max_health);
                                 (*itMinion)->health_bar.w = static_cast<int>(std::round(k));
@@ -599,7 +599,7 @@ void Background::render() { //设定渲染器的函数
                                 bullet->bulletPosition.pop_back();
                             }
                             if (bosses != boss->positions.end()) { //防止数组越界
-                                (*bosses)->health = (*bosses)->health - 4;
+                                (*bosses)->health = (*bosses)->health - 0.2;
                                 double k = (minion_width-12) * ((*bosses)->health)/((*bosses)->max_health);
                                 (*bosses)->health_bar.w = static_cast<int>(std::round(k));
                                 if ((*bosses)->health <= 0){
@@ -650,9 +650,9 @@ void Background::render() { //设定渲染器的函数
                         (*itMinion)->position.y + minion->heights[(*itMinion)->type] >= playerY - bullet->height*(bullet->firePoint)) {
                             if (itMinion != minion->positions.end()) { //防止数组越界
                                 if (magic_point >= 0 && magic_point <3) {
-                                    (*itMinion)->health = (*itMinion)->health - 0.1;
+                                    (*itMinion)->health = (*itMinion)->health - 0.05;
                                 } else {
-                                    (*itMinion)->health = (*itMinion)->health - 0.2;
+                                    (*itMinion)->health = (*itMinion)->health - 0.1;
                                 }
                                 double k = (*itMinion)->position.w * ((*itMinion)->health)/((*itMinion)->max_health);
                                 (*itMinion)->health_bar.w = static_cast<int>(std::round(k));
@@ -705,9 +705,9 @@ void Background::render() { //设定渲染器的函数
                         (*bosses)->position[(*bosses)->state].y + boss->heights[(*bosses)->type][(*bosses)->state] >= playerY - bullet->height*(bullet->firePoint)) {
                             if (bosses != boss->positions.end()) { //防止数组越界
                                 if (magic_point >= 0 && magic_point <=3) {
-                                    (*bosses)->health = (*bosses)->health - 0.1;
+                                    (*bosses)->health = (*bosses)->health - 0.05;
                                 } else {
-                                    (*bosses)->health = (*bosses)->health - 0.2;
+                                    (*bosses)->health = (*bosses)->health - 0.1;
                                 }
                                 double k = (minion_width-12) * ((*bosses)->health)/((*bosses)->max_health);
                                 (*bosses)->health_bar.w = static_cast<int>(std::round(k));
@@ -756,7 +756,7 @@ void Background::render() { //设定渲染器的函数
                             if (itMinion != minion->positions.end()) { //防止数组越界
                                 (*itMinion)->health = (*itMinion)->health - 0.04*(0.5+0.5*int(magic_point));
                                 if (magic_point >= 3 && (pl && po)) {
-                                    (*itMinion)->health = (*itMinion)->health - 0.03*(0.5+0.5*int(magic_point));
+                                    (*itMinion)->health = (*itMinion)->health - 0.02*(0.5+0.5*int(magic_point));
                                 }
                                 double k = (*itMinion)->position.w * ((*itMinion)->health)/((*itMinion)->max_health);
                                 (*itMinion)->health_bar.w = static_cast<int>(std::round(k));
@@ -808,7 +808,7 @@ void Background::render() { //设定渲染器的函数
                             if (bosses != boss->positions.end()) { //防止数组越界
                                 (*bosses)->health = (*bosses)->health - 0.04*(1+int(magic_point));
                                 if (magic_point >= 3 && (pl1 && po1)) {
-                                    (*bosses)->health = (*bosses)->health - 0.03*(1+int(magic_point));
+                                    (*bosses)->health = (*bosses)->health - 0.02*(1+int(magic_point));
                                 }
                                 double k = (minion_width-12) * ((*bosses)->health)/((*bosses)->max_health);
                                 (*bosses)->health_bar.w = static_cast<int>(std::round(k));
