@@ -1,6 +1,6 @@
 
-/untitled/cmake-build-debug
-untitled/CMakeLists.txt
-untitled/src/CMakeLists.txt
-untitled/src/main.cpp
-/untitled/cmake-build-release
+/cmake-build-debug
+CMakeLists.txt
+src/CMakeLists.txt
+src/main.cpp
+/cmake-build-release
